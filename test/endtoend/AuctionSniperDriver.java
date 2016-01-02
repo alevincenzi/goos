@@ -1,5 +1,7 @@
 package endtoend;
 
+import static org.hamcrest.Matchers.equalTo;
+
 import javax.swing.JFrame;
 
 import org.hamcrest.Matcher;

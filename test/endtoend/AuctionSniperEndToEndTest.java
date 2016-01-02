@@ -1,4 +1,4 @@
-package test.endtoend;
+package endtoend;
 
 import static org.junit.Assert.*;
 

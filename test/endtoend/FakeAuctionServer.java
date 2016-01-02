@@ -1,5 +1,10 @@
 package endtoend;
 
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ChatManagerListener;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+
 public class FakeAuctionServer {
 
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
