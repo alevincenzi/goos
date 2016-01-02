@@ -1,4 +1,4 @@
-package endtoend;
+package auctionsniper.test.endtoend;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManagerListener;

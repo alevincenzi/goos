@@ -1,4 +1,4 @@
-package endtoend;
+package auctionsniper.test.endtoend;
 
 import sun.applet.Main;
 
