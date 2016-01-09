@@ -2,6 +2,8 @@ package auctionsniper.test.endtoend;
 
 import static auctionsniper.test.endtoend.FakeAuctionServer.*;
 
+import auctionsniper.ui.Main;
+
 public class ApplicationRunner {
 	
 	public static final String SNIPER_ID       = "sniper";
