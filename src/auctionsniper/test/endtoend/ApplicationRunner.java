@@ -1,10 +1,10 @@
 package auctionsniper.test.endtoend;
 
-import sun.applet.Main;
+import static auctionsniper.test.endtoend.FakeAuctionServer.*;
 
 public class ApplicationRunner {
 	
-	public static final String SNIPER_ID = "sniper";
+	public static final String SNIPER_ID       = "sniper";
 	public static final String SNIPER_PASSWORD = "sniper";
 	
 	private AuctionSniperDriver driver;
@@ -17,7 +17,7 @@ public class ApplicationRunner {
 			public void run(){
 				
 				try {
-					Main.main(FakeAuctionServer.XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction.getItemId());
+					Main.main(XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction.getItemId());
 				}
 				catch(Exception e){
 					e.printStackTrace();
@@ -29,11 +29,11 @@ public class ApplicationRunner {
 		thread.start();
 		
 		driver = new AuctionSniperDriver(1000);
-		driver.showSniperStatus(Main.STATUS_JOINING);
+		driver.showsSniperStatus(Main.STATUS_JOINING);
 	}
 	
 	public void showsSniperHasLostAuction(){
-		driver.showSniperStatus(Main.STATUS_LOST);
+		driver.showsSniperStatus(Main.STATUS_LOST);
 	}
 	
 	public void stop(){

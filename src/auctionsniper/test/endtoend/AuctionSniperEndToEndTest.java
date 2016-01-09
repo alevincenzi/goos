@@ -1,7 +1,5 @@
 package auctionsniper.test.endtoend;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Test;
 
@@ -24,7 +22,7 @@ public class AuctionSniperEndToEndTest {
 	}
 	
 	@After
-	public void stopAcution() {
+	public void stopAuction() {
 		auction.stop();
 	}
 	
