@@ -1,11 +1,18 @@
 # Goos
 Growing Object Oriented Software guided by Tests
 
+Dependencies
+============
+
 - Java 8
 - Eclipse 4.5.1
-- Openfire 3.10.2. 
+- Openfire 3.10.2.
+- JUnit 4.8.2 + HamCrest 1.3.0
+- Smack
+- WindowLicker
 
-Openfire
+Openfire Setup
+==============
 
 user/pwd
   - sniper/sniper

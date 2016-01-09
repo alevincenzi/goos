@@ -2,13 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/dep/smack_3_1_0.jar"/>
-	<classpathentry kind="lib" path="lib/dep/smackx_3_1_0.jar"/>
-	<classpathentry kind="lib" path="lib/dev/windowlicker-core-r268.jar"/>
-	<classpathentry kind="lib" path="lib/dev/windowlicker-swing-r268.jar"/>
-	<classpathentry kind="lib" path="lib/dev/hamcrest-core-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/dev/hamcrest-library-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/dev/objenesis-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/hamcrest-library-1.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/smack.jar"/>
+	<classpathentry kind="lib" path="lib/windowlicker-core.jar"/>
+	<classpathentry kind="lib" path="lib/windowlicker-swing.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
