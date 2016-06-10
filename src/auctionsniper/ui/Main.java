@@ -25,8 +25,16 @@ public class Main {
 	private static final String ITEM_ID_AS_LOGIN  = "auction-%s";
 	private static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 	
+	private static final int ARG_XMPP_HOSTNAME = 0; 
+	private static final int ARG_SNIPER_ID     = 1; 
+	private static final int ARG_SNIPER_PSWD   = 2; 
+	private static final int ARG_ITEM_ID       = 3; 
+	
 	private MainWindow ui;
 	
+	@SuppressWarnings("unused")
+	private Chat notToBeGarbageCollected;
+
 	public static class MainWindow extends JFrame {
 		
 		private final JLabel sniperStatus = createLabel(STATUS_JOINING);
@@ -47,6 +55,10 @@ public class Main {
 			result.setBorder(new LineBorder(Color.BLACK));
 			return result;			
 		}
+		
+		public void showStatus(String status) {
+			sniperStatus.setText(status);
+		}
 	}
 
 	
@@ -63,26 +75,35 @@ public class Main {
 		});
 	}
 	
-	public static void main(
-			String xmppHostname,
-			String sniperId,
-			String sniperPassword,
-			String itemId) throws Exception {
+	public static void main(String ... args) throws Exception {
 		
 		Main main = new Main();
 		
-		XMPPConnection connection = connectTo(xmppHostname, sniperId, sniperPassword);
-		
-		Chat chat = connection.getChatManager().createChat(
-		
-				auctionId(itemId, connection),
-				new MessageListener() {
-					@Override
-					public void processMessage(Chat chat, Message message) {
-						// nothing yet
-					}
-				});
+		main.joinAuction(connectTo(
+			args[ARG_XMPP_HOSTNAME],
+			args[ARG_SNIPER_ID],
+			args[ARG_SNIPER_PSWD]),
+			args[ARG_ITEM_ID]);
+	}
+	
+	private void
+	joinAuction(final XMPPConnection connection, String itemId) throws XMPPException {
 
+		Chat chat = connection.getChatManager().createChat(
+			auctionId(itemId, connection),
+			new MessageListener() {
+				@Override
+				public void processMessage(Chat chat, Message message) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							ui.showStatus(STATUS_LOST);
+						}
+					});
+				}
+			});
+
+		notToBeGarbageCollected = chat;
+		
 		chat.sendMessage(new Message());
 	}
 	
@@ -96,7 +117,6 @@ public class Main {
 	}
 	
 	private static String auctionId(String itemId, XMPPConnection connection) {
-
 		return String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 	}
 }
