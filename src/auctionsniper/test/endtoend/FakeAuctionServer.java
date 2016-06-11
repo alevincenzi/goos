@@ -1,12 +1,12 @@
 package auctionsniper.test.endtoend;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.hamcrest.Matcher;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.MessageListener;
@@ -51,11 +51,15 @@ public class FakeAuctionServer {
 	
 	
 	public void reportPrice(int price, int increment, String bidder) throws XMPPException {
-		
+		currentChat.sendMessage(String.format(
+			"SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;",
+			price, increment, bidder));
 	}
 	
-	public void hasReceivedBid(int bid, String bidder) throws InterruptedException {
-		
+	public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+		assertThat(currentChat.getParticipant(), equalTo(sniperId));
+		messageListener.receivesAMessage(equalTo(String.format(
+			"SOLVersion 1.1; Command: Bid; Price: %d;", bid)));
 	}
 	
 	public String getItemId(){
@@ -88,5 +92,11 @@ class SingleMessageListener implements MessageListener {
 	public void receivesAMessage() throws InterruptedException {
 		assertThat(
 			"Message", messages.poll(5, TimeUnit.SECONDS), is(notNullValue()));
+	}
+	
+	public void receivesAMessage(Matcher<String> messageMatcher) throws InterruptedException {
+		final Message message = messages.poll(5, TimeUnit.SECONDS);
+		assertThat("Message", message, is(notNullValue()));
+		assertThat(message.getBody(), messageMatcher);
 	}
 }
