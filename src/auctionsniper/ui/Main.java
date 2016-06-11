@@ -1,6 +1,8 @@
 package auctionsniper.ui;
 
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,8 +20,8 @@ public class Main {
 	public static final String MAIN_WINDOW_NAME   = "Auction Sniper Main";
 	public static final String SNIPER_STATUS_NAME = "sniper status";
 	
-	public static final String STATUS_JOINING = "Joining";
-	public static final String STATUS_LOST    = "Lost";
+	public static final String JOIN_COMMAND_FORMAT = "";
+	public static final String BID_COMMAND_FORMAT  = "SOLVersion 1.1; Command: Bid; Price: %d;";
 	
 	private static final String AUCTION_RESOURCE  = "Auction";
 	private static final String ITEM_ID_AS_LOGIN  = "auction-%s";
@@ -36,6 +38,10 @@ public class Main {
 	private Chat notToBeGarbageCollected;
 
 	public static class MainWindow extends JFrame {
+		
+		public static final String STATUS_JOINING = "Joining";
+		public static final String STATUS_LOST    = "Lost";
+		public static final String STATUS_BIDDING = "Bidding";
 		
 		private final JLabel sniperStatus = createLabel(STATUS_JOINING);
 
@@ -89,6 +95,8 @@ public class Main {
 	private void
 	joinAuction(final XMPPConnection connection, String itemId) throws XMPPException {
 
+		disconnectWhenUICloses(connection);
+
 		Chat chat = connection.getChatManager().createChat(
 			auctionId(itemId, connection),
 			new MessageListener() {
@@ -96,7 +104,7 @@ public class Main {
 				public void processMessage(Chat chat, Message message) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
-							ui.showStatus(STATUS_LOST);
+							ui.showStatus(MainWindow.STATUS_LOST);
 						}
 					});
 				}
@@ -104,7 +112,16 @@ public class Main {
 
 		notToBeGarbageCollected = chat;
 		
-		chat.sendMessage(new Message());
+		chat.sendMessage(JOIN_COMMAND_FORMAT);
+	}
+	
+	private void disconnectWhenUICloses(final XMPPConnection connection) {
+		ui.addWindowListener(new WindowAdapter(){
+			@Override
+			public void windowClosed(WindowEvent e) {
+				connection.disconnect();
+			}
+		});
 	}
 	
 	private static XMPPConnection

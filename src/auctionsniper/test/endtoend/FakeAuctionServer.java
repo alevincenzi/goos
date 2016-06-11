@@ -14,6 +14,8 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
+import auctionsniper.ui.Main;
+
 public class FakeAuctionServer {
 
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -56,18 +58,25 @@ public class FakeAuctionServer {
 			price, increment, bidder));
 	}
 	
-	public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
-		assertThat(currentChat.getParticipant(), equalTo(sniperId));
-		messageListener.receivesAMessage(equalTo(String.format(
-			"SOLVersion 1.1; Command: Bid; Price: %d;", bid)));
-	}
 	
 	public String getItemId(){
 		return itemId;
 	}
 	
-	public void hasReceivedJoinRequestFromSniper() throws InterruptedException{
-		messageListener.receivesAMessage();
+	public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException{
+		receivesAMessageMatching(
+			sniperId, equalTo(Main.JOIN_COMMAND_FORMAT));
+	}
+	
+	public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+		receivesAMessageMatching(
+			sniperId, equalTo(String.format(Main.BID_COMMAND_FORMAT, bid)));
+	}
+		
+		
+	public void	receivesAMessageMatching(String sniperId, Matcher<? super String> messageMatcher) throws InterruptedException{
+		messageListener.receivesAMessage(messageMatcher);
+		assertThat(currentChat.getParticipant(), equalTo(sniperId));
 	}
 	
 	public void announceClosed() throws XMPPException{
@@ -88,13 +97,8 @@ class SingleMessageListener implements MessageListener {
 	public void processMessage(Chat chat, Message message) {
 		messages.add(message);
 	}
-
-	public void receivesAMessage() throws InterruptedException {
-		assertThat(
-			"Message", messages.poll(5, TimeUnit.SECONDS), is(notNullValue()));
-	}
 	
-	public void receivesAMessage(Matcher<String> messageMatcher) throws InterruptedException {
+	public void receivesAMessage(Matcher<? super String> messageMatcher) throws InterruptedException {
 		final Message message = messages.poll(5, TimeUnit.SECONDS);
 		assertThat("Message", message, is(notNullValue()));
 		assertThat(message.getBody(), messageMatcher);

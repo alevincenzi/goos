@@ -3,6 +3,7 @@ package auctionsniper.test.endtoend;
 import static auctionsniper.test.endtoend.FakeAuctionServer.*;
 
 import auctionsniper.ui.Main;
+import auctionsniper.ui.Main.MainWindow;
 
 public class ApplicationRunner {
 	
@@ -32,15 +33,15 @@ public class ApplicationRunner {
 		thread.start();
 		
 		driver = new AuctionSniperDriver(1000);
-		driver.showsSniperStatus(Main.STATUS_JOINING);
+		driver.showsSniperStatus(MainWindow.STATUS_JOINING);
 	}
 	
 	public void showsSniperHasLostAuction(){
-		driver.showsSniperStatus(Main.STATUS_LOST);
+		driver.showsSniperStatus(MainWindow.STATUS_LOST);
 	}
 	
 	public void hasShownSniperIsBidding() {
-		
+		driver.showsSniperStatus(MainWindow.STATUS_BIDDING);
 	}
 
 	public void stop(){
