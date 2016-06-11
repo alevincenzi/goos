@@ -49,6 +49,15 @@ public class FakeAuctionServer {
 			});
 	}
 	
+	
+	public void reportPrice(int price, int increment, String bidder) throws XMPPException {
+		
+	}
+	
+	public void hasReceivedBid(int bid, String bidder) throws InterruptedException {
+		
+	}
+	
 	public String getItemId(){
 		return itemId;
 	}
