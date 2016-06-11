@@ -1,17 +1,16 @@
-# Goos
-Growing Object Oriented Software guided by Tests
+# Growing Object Oriented Software guided by Tests
+
+A small exercise on TDD
 
 # Todo
 
-- -Single item: join - lose without bidding-
+- Single item: join - lose without bidding
 - Single item: join - bid and lose
 - Single item: join - bid and win
 - Show price details
 - Multiple items
 - Add items through the user interface
 - Stop bidding at the stop price
-
-# Setup
 
 Dependencies
 ============
@@ -33,4 +32,3 @@ user/pwd
 
 Server Settings / Resource Policy / Never Kick
 Server Settings / Offline Messages / Drop
-
