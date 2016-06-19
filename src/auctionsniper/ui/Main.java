@@ -27,6 +27,7 @@ public class Main implements AuctionEventListener {
 	public static final String BID_COMMAND_FORMAT  = "SOLVersion 1.1; Command: Bid; Price: %d;";
 
 	public static final String CLOSE_EVENT_FORMAT  = "SOLVersion: 1.1; Event: CLOSE;";
+	public static final String PRICE_EVENT_FORMAT  = "SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;"; 
 	
 	private static final String AUCTION_RESOURCE  = "Auction";
 	private static final String ITEM_ID_AS_LOGIN  = "auction-%s";
@@ -140,5 +141,10 @@ public class Main implements AuctionEventListener {
 				ui.showStatus(MainWindow.STATUS_LOST);
 			}
 		});
+	}
+
+	@Override
+	public void currentPrice(int price, int increment) {
+		// TODO Auto-generated method stub		
 	}
 }
