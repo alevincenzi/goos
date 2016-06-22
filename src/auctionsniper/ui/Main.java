@@ -17,6 +17,7 @@ import auctionsniper.Auction;
 import auctionsniper.AuctionMessageTranslator;
 import auctionsniper.AuctionSniper;
 import auctionsniper.SniperListener;
+import auctionsniper.XMPPAuction;
 
 public class Main implements SniperListener {
 
@@ -101,10 +102,6 @@ public class Main implements SniperListener {
 	private void
 	joinAuction(final XMPPConnection connection, String itemId) throws XMPPException {
 
-		Auction nullAuction = new Auction(){
-			public void bid(int amount) { }
-		};
-		
 		disconnectWhenUICloses(connection);
 
 		Chat chat = connection.getChatManager().createChat(
@@ -112,21 +109,12 @@ public class Main implements SniperListener {
 
 		notToBeGarbageCollected = chat;
 		
-		Auction auction = new Auction(){
-			@Override
-			public void bid(int amount) {
-				try {
-					chat.sendMessage(String.format(BID_COMMAND_FORMAT, amount));
-				} catch (XMPPException e) {
-					e.printStackTrace();
-				}
-			}
-		};
+		Auction auction = new XMPPAuction(chat);
 		
 		chat.addMessageListener(
 			new AuctionMessageTranslator(new AuctionSniper(auction, this)));		
 		
-		chat.sendMessage(JOIN_COMMAND_FORMAT);
+		auction.join();
 	}
 	
 	private void disconnectWhenUICloses(final XMPPConnection connection) {
