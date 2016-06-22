@@ -19,7 +19,7 @@ import auctionsniper.AuctionSniper;
 import auctionsniper.SniperListener;
 import auctionsniper.XMPPAuction;
 
-public class Main implements SniperListener {
+public class Main {
 
 	public static final String MAIN_WINDOW_NAME   = "Auction Sniper Main";
 	public static final String SNIPER_STATUS_NAME = "sniper status";
@@ -74,7 +74,27 @@ public class Main implements SniperListener {
 		}
 	}
 
-	
+	public class SniperStateDisplayer implements SniperListener {
+
+		@Override
+		public void sniperLost() {
+			showStatus(MainWindow.STATUS_LOST);
+		}
+
+		@Override
+		public void sniperBidding() {
+			showStatus(MainWindow.STATUS_BIDDING);
+		}
+		
+		private void showStatus(final String status){
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run(){
+					ui.showStatus(status);
+				}
+			});			
+		}
+	}
+
 	public Main() throws Exception {
 		startUserInterface();
 	}
@@ -112,7 +132,9 @@ public class Main implements SniperListener {
 		Auction auction = new XMPPAuction(chat);
 		
 		chat.addMessageListener(
-			new AuctionMessageTranslator(new AuctionSniper(auction, this)));		
+			new AuctionMessageTranslator(
+				new AuctionSniper(auction,
+					new SniperStateDisplayer())));		
 		
 		auction.join();
 	}
@@ -137,23 +159,5 @@ public class Main implements SniperListener {
 	
 	private static String auctionId(String itemId, XMPPConnection connection) {
 		return String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
-	}
-
-	@Override
-	public void sniperLost() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run(){
-				ui.showStatus(MainWindow.STATUS_LOST);
-			}
-		});
-	}
-
-	@Override
-	public void sniperBidding() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run(){
-				ui.showStatus(MainWindow.STATUS_BIDDING);
-			}
-		});
 	}
 }
