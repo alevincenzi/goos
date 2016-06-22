@@ -33,7 +33,7 @@ public class AuctionMessageTranslator implements MessageListener {
 		private final HashMap<String, String> fields = new HashMap<String, String>();
 		
 		public String type()         { return get("Event"); }
-		public int    currentPrice() { return getInt("CurrenPrice"); }
+		public int    currentPrice() { return getInt("CurrentPrice"); }
 		public int    increment()    { return getInt("Increment"); }
 		
 		private String get(String fieldName){
