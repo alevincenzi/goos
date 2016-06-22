@@ -9,7 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import auctionsniper.AuctionEventListener;
+import auctionsniper.AuctionEventListener.PriceSource;
 import auctionsniper.AuctionMessageTranslator;
+import auctionsniper.test.endtoend.ApplicationRunner;
 import auctionsniper.ui.Main;
 
 @RunWith(JMock.class)
@@ -22,10 +24,10 @@ public class AuctionMessageTranslatorTest {
 	private final AuctionEventListener listener =
 			context.mock(AuctionEventListener.class);
 	private final AuctionMessageTranslator translator =
-			new AuctionMessageTranslator(listener);
+			new AuctionMessageTranslator(ApplicationRunner.SNIPER_ID, listener);
 
 	@Test
-	public void notifyAuctionCLosedWhenCloseMessageReceived(){
+	public void notifyAuctionClosedWhenCloseMessageReceived(){
 		
 		context.checking(new Expectations() {{
 			oneOf(listener).auctionClosed();
@@ -38,14 +40,27 @@ public class AuctionMessageTranslatorTest {
 	}
 	
 	 @Test
-	 public void notifiesBidDetailsWhenCurrentPriceMessageReceived() {
+	 public void notifiesBidDetailsWhenCurrentPriceMessageReceivedFromOtherBidder() {
 		 
 		 context.checking(new Expectations() {{
-			 exactly(1).of(listener).currentPrice(192, 7);
+			 exactly(1).of(listener).currentPrice(192, 7, PriceSource.FromOtherBidder);
 		 }});
 		 
 		 Message message = new Message();
-		 message.setBody(String.format(Main.PRICE_EVENT_FORMAT, 192, 7, "Someone else"));
+		 message.setBody(String.format(Main.PRICE_EVENT_FORMAT, 192, 7, "Somebody else"));
+			
+		 translator.processMessage(UNUSED_CHAT, message);
+	 }
+	 
+	 @Test
+	 public void notifiesBidDetailsWhenCurrentPriceMessageReceivedFromSniper() {
+		 
+		 context.checking(new Expectations() {{
+			 exactly(1).of(listener).currentPrice(234, 5, PriceSource.FromSniper);
+		 }});
+		 
+		 Message message = new Message();
+		 message.setBody(String.format(Main.PRICE_EVENT_FORMAT, 234, 5, ApplicationRunner.SNIPER_ID));
 			
 		 translator.processMessage(UNUSED_CHAT, message);
 	 }

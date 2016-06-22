@@ -88,6 +88,11 @@ public class Main {
 			showStatus(MainWindow.STATUS_BIDDING);
 		}
 		
+		@Override
+		public void sniperWinning() {
+			showStatus(MainWindow.STATUS_WINNING);
+		}
+		
 		private void showStatus(final String status){
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run(){
@@ -135,7 +140,9 @@ public class Main {
 		
 		chat.addMessageListener(
 			new AuctionMessageTranslator(
-				new AuctionSniper(auction,
+				connection.getUser(),
+				new AuctionSniper(
+					auction,
 					new SniperStateDisplayer())));		
 		
 		auction.join();
