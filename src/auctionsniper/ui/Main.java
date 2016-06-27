@@ -14,10 +14,10 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 import auctionsniper.Auction;
-import auctionsniper.AuctionMessageTranslator;
 import auctionsniper.AuctionSniper;
 import auctionsniper.SniperListener;
-import auctionsniper.XMPPAuction;
+import auctionsniper.xmpp.AuctionMessageTranslator;
+import auctionsniper.xmpp.XMPPAuction;
 
 public class Main {
 
