@@ -1,13 +1,15 @@
 package auctionsniper.ui;
 
-import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.border.LineBorder;
+import javax.swing.table.AbstractTableModel;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
@@ -23,6 +25,7 @@ public class Main {
 
 	public static final String MAIN_WINDOW_NAME   = "Auction Sniper Main";
 	public static final String SNIPER_STATUS_NAME = "sniper status";
+	public static final String SNIPERS_TABLE_NAME = "Snipers Table";
 	
 	public static final String JOIN_COMMAND_FORMAT = "";
 	public static final String BID_COMMAND_FORMAT  = "SOLVersion 1.1; Command: Bid; Price: %d;";
@@ -52,27 +55,60 @@ public class Main {
 		public static final String STATUS_WINNING = "Winning";
 		public static final String STATUS_WON     = "Won";
 		
-		private final JLabel sniperStatus = createLabel(STATUS_JOINING);
+		private final SnipersTableModel snipers = new SnipersTableModel();
 
 		private static final long serialVersionUID = 1L;
 
 		public MainWindow() {
 			super("Auction Sniper");
 			setName(MAIN_WINDOW_NAME);
-			add(sniperStatus);
+			fillContentPane(makeSnipersTable());
+			pack();
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setVisible(true);
 		}
 		
-		private static JLabel createLabel(String initialText){
-			JLabel result = new JLabel(initialText);
-			result.setName(SNIPER_STATUS_NAME);
-			result.setBorder(new LineBorder(Color.BLACK));
-			return result;			
+		private void fillContentPane(JTable snipersTable){
+			final Container contentPane = getContentPane();
+			contentPane.setLayout(new BorderLayout());
+			
+			contentPane.add(new JScrollPane(snipersTable), BorderLayout.CENTER);
 		}
 		
-		public void showStatus(String status) {
-			sniperStatus.setText(status);
+		private JTable makeSnipersTable(){
+			final JTable snipersTable = new JTable(snipers);
+			snipersTable.setName(SNIPERS_TABLE_NAME);
+			return snipersTable;
+		}
+		
+		public void showStatusText(String status) {
+			snipers.setStatusText(status);
+		}
+	}
+
+	public static class SnipersTableModel extends AbstractTableModel {
+		
+		private static final long serialVersionUID = 1L;
+		private String statusText = MainWindow.STATUS_JOINING;
+
+		@Override
+		public int getRowCount() {
+			return 1;
+		}
+
+		@Override
+		public int getColumnCount() {
+			return 1;
+		}
+
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			return statusText;
+		}
+		
+		public void setStatusText(String statusText) {
+			this.statusText = statusText;
+			fireTableRowsUpdated(0, 0);
 		}
 	}
 
@@ -101,7 +137,7 @@ public class Main {
 		private void showStatus(final String status){
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run(){
-					ui.showStatus(status);
+					ui.showStatusText(status);
 				}
 			});			
 		}
