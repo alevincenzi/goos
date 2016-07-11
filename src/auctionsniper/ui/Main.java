@@ -18,6 +18,7 @@ import org.jivesoftware.smack.XMPPException;
 import auctionsniper.Auction;
 import auctionsniper.AuctionSniper;
 import auctionsniper.SniperListener;
+import auctionsniper.SniperState;
 import auctionsniper.xmpp.AuctionMessageTranslator;
 import auctionsniper.xmpp.XMPPAuction;
 
@@ -120,7 +121,7 @@ public class Main {
 		}
 
 		@Override
-		public void sniperBidding() {
+		public void sniperBidding(final SniperState state) {
 			showStatus(MainWindow.STATUS_BIDDING);
 		}
 		
@@ -183,6 +184,7 @@ public class Main {
 			new AuctionMessageTranslator(
 				connection.getUser(),
 				new AuctionSniper(
+					itemId,
 					auction,
 					new SniperStateDisplayer())));		
 		

@@ -10,11 +10,14 @@ import org.junit.runner.RunWith;
 import auctionsniper.Auction;
 import auctionsniper.AuctionSniper;
 import auctionsniper.SniperListener;
+import auctionsniper.SniperState;
 import auctionsniper.AuctionEventListener.PriceSource;
 
 @RunWith(JMock.class)
 public class AuctionSniperTest {
 
+	protected static final String ITEM_ID = "item-id";
+	
 	private final Mockery context =
 			new Mockery();
 	
@@ -25,7 +28,7 @@ public class AuctionSniperTest {
 			context.mock(SniperListener.class);
 	
 	private final AuctionSniper sniper =
-			new AuctionSniper(auction, sniperListener);
+			new AuctionSniper(ITEM_ID, auction, sniperListener);
 	
 	private final States sniperState =	
 			context.states("sniper");
@@ -45,7 +48,7 @@ public class AuctionSniperTest {
 	public void reportLostIfAuctionClosesWhenBidding(){
 		context.checking(new Expectations(){{
 			ignoring(auction);
-			allowing(sniperListener).sniperBidding();
+			allowing(sniperListener).sniperBidding(with(any(SniperState.class)));
 				then(sniperState.is("bidding"));
 				
 			atLeast(1).of(sniperListener).sniperLost();
@@ -77,10 +80,11 @@ public class AuctionSniperTest {
 	public void bidsHigherAndReportsBiddingWhenNewPriceArrives(){
 		final int price = 1001;
 		final int increment = 25;
+		final int bid = price + increment;
 		
 		context.checking(new Expectations(){{
 			one(auction).bid(price + increment);
-			atLeast(1).of(sniperListener).sniperBidding();
+			atLeast(1).of(sniperListener).sniperBidding(new SniperState(ITEM_ID, price, bid));
 		}});
 		
 		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
