@@ -85,13 +85,21 @@ public class Main {
 		public void showStatusText(String status) {
 			snipers.setStatusText(status);
 		}
+		
+		public void sniperStatusChanged(SniperState state, String statusText){
+			snipers.sniperStatusChanged(state, statusText);
+		}
 	}
 
 	public static class SnipersTableModel extends AbstractTableModel {
 		
 		private static final long serialVersionUID = 1L;
-		private String statusText = MainWindow.STATUS_JOINING;
 
+		private final static SniperState STARTING_UP = new SniperState("", 0, 0);
+		
+		private String statusText = MainWindow.STATUS_JOINING;
+		private SniperState sniperState = STARTING_UP;
+		
 		@Override
 		public int getRowCount() {
 			return 1;
@@ -99,12 +107,30 @@ public class Main {
 
 		@Override
 		public int getColumnCount() {
-			return 1;
+			return Column.values().length;
 		}
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			return statusText;
+			
+			switch(Column.at(columnIndex)){
+			case ITEM_ITENTIFIER:
+				return sniperState.itemId;
+			case LAST_BID:
+				return sniperState.lastBid;
+			case LAST_PRICE:
+				return sniperState.lastPrice;
+			case SNIPER_STATUS:
+				return statusText;
+			default:
+				throw new IllegalArgumentException("No column at " + columnIndex);
+			}
+		}
+
+		public void sniperStatusChanged(SniperState newSniperState, String newStatusText){
+			sniperState = newSniperState;
+			statusText = newStatusText;
+			fireTableRowsUpdated(0, 0);
 		}
 		
 		public void setStatusText(String statusText) {
@@ -122,7 +148,11 @@ public class Main {
 
 		@Override
 		public void sniperBidding(final SniperState state) {
-			showStatus(MainWindow.STATUS_BIDDING);
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run(){
+					ui.sniperStatusChanged(state, MainWindow.STATUS_BIDDING);
+				}
+			});
 		}
 		
 		@Override
