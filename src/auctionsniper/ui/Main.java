@@ -18,7 +18,7 @@ import org.jivesoftware.smack.XMPPException;
 import auctionsniper.Auction;
 import auctionsniper.AuctionSniper;
 import auctionsniper.SniperListener;
-import auctionsniper.SniperState;
+import auctionsniper.SniperSnapshot;
 import auctionsniper.xmpp.AuctionMessageTranslator;
 import auctionsniper.xmpp.XMPPAuction;
 
@@ -86,7 +86,7 @@ public class Main {
 			snipers.setStatusText(status);
 		}
 		
-		public void sniperStatusChanged(SniperState state, String statusText){
+		public void sniperStatusChanged(SniperSnapshot state, String statusText){
 			snipers.sniperStatusChanged(state, statusText);
 		}
 	}
@@ -95,10 +95,10 @@ public class Main {
 		
 		private static final long serialVersionUID = 1L;
 
-		private final static SniperState STARTING_UP = new SniperState("", 0, 0);
+		private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0);
 		
 		private String statusText = MainWindow.STATUS_JOINING;
-		private SniperState sniperState = STARTING_UP;
+		private SniperSnapshot sniperState = STARTING_UP;
 		
 		@Override
 		public int getRowCount() {
@@ -120,14 +120,14 @@ public class Main {
 				return sniperState.lastBid;
 			case LAST_PRICE:
 				return sniperState.lastPrice;
-			case SNIPER_STATUS:
+			case SNIPER_STATE:
 				return statusText;
 			default:
 				throw new IllegalArgumentException("No column at " + columnIndex);
 			}
 		}
 
-		public void sniperStatusChanged(SniperState newSniperState, String newStatusText){
+		public void sniperStatusChanged(SniperSnapshot newSniperState, String newStatusText){
 			sniperState = newSniperState;
 			statusText = newStatusText;
 			fireTableRowsUpdated(0, 0);
@@ -147,7 +147,7 @@ public class Main {
 		}
 
 		@Override
-		public void sniperBidding(final SniperState state) {
+		public void sniperBidding(final SniperSnapshot state) {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run(){
 					ui.sniperStatusChanged(state, MainWindow.STATUS_BIDDING);
