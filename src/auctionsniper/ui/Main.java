@@ -129,7 +129,8 @@ public class Main {
 		}
 
 		private static String[] STATUS_TEXT = { MainWindow.STATUS_JOINING,
-												MainWindow.STATUS_BIDDING };
+												MainWindow.STATUS_BIDDING,
+												MainWindow.STATUS_WINNING};
 		
 		public void sniperStatusChanged(SniperSnapshot newSniperSnapshot){
 			sniperSnapshot = newSniperSnapshot;
@@ -157,11 +158,6 @@ public class Main {
 					ui.sniperStatusChanged(sniperSnapshot);
 				}
 			});
-		}
-		
-		@Override
-		public void sniperWinning() {
-			showStatus(MainWindow.STATUS_WINNING);
 		}
 		
 		@Override

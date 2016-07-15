@@ -2,15 +2,16 @@ package auctionsniper;
 
 public class AuctionSniper implements AuctionEventListener{
 
-	private final String itemId;
 	private final Auction auction;
 	private final SniperListener sniperListener;
-	private boolean isWinning = false;
+	
+	private SniperSnapshot snapshot;
+	private boolean        isWinning = false;
 	
 	public AuctionSniper(String itemId, Auction auction, SniperListener sniperListener){
-		this.itemId = itemId;
-		this.auction = auction;
+		this.auction        = auction;
 		this.sniperListener = sniperListener;
+		this.snapshot       = SniperSnapshot.joining(itemId);
 	}
 	
 	@Override
@@ -28,11 +29,13 @@ public class AuctionSniper implements AuctionEventListener{
 		isWinning = priceSource == PriceSource.FromSniper;
 		
 		if (isWinning) {
-			sniperListener.sniperWinning();
+			snapshot = snapshot.winning(price);
 		} else {
 			int bid = price + increment;
 			auction.bid(bid);
-			sniperListener.sniperStateChanged(new SniperSnapshot(itemId, price, bid, SniperState.BIDDING));
+			snapshot = snapshot.bidding(price, bid);
 		}
+		
+		sniperListener.sniperStateChanged(snapshot);
 	}
 }

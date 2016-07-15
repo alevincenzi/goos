@@ -1,6 +1,7 @@
 package auctionsniper.test.unit;
 
 import static auctionsniper.SniperState.BIDDING;
+import static auctionsniper.SniperState.WINNING;
 
 import static org.hamcrest.Matchers.equalTo;
 
@@ -82,7 +83,8 @@ public class AuctionSniperTest {
 	public void reportWonIfAuctionClosesWhenWinning(){
 		context.checking(new Expectations(){{
 			ignoring(auction);
-			allowing(sniperListener).sniperWinning();
+			allowing(sniperListener).sniperStateChanged(
+				with(aSniperThatIs(WINNING)));	
 				then(sniperState.is("winning"));
 				
 			atLeast(1).of(sniperListener).sniperWon();
@@ -113,9 +115,17 @@ public class AuctionSniperTest {
 	public void reportsIsWinningWhenCurrentPriceComesFromSniper(){
 		
 		context.checking(new Expectations() {{
-			atLeast(1).of(sniperListener).sniperWinning();
+			ignoring(auction);
+			allowing(sniperListener).sniperStateChanged(
+				with(aSniperThatIs(BIDDING)));
+				then(sniperState.is("bidding"));
+			
+			atLeast(1).of(sniperListener).sniperStateChanged(
+				new SniperSnapshot(ITEM_ID, 135, 135, WINNING));
+				when(sniperState.is("bidding"));
 		}});
 		
+		sniper.currentPrice(123, 12, PriceSource.FromOtherBidder);
 		sniper.currentPrice(123, 45, PriceSource.FromSniper);	
 	}
 }
