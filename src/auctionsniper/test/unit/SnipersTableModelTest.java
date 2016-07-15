@@ -1,5 +1,7 @@
 package auctionsniper.test.unit;
 
+import static auctionsniper.SniperState.BIDDING;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
@@ -50,7 +52,7 @@ public class SnipersTableModelTest {
 		}});
 
 		model.sniperStatusChanged(
-			new SniperSnapshot("item id", 555, 666), MainWindow.STATUS_BIDDING);
+			new SniperSnapshot("item id", 555, 666, BIDDING));
 		
 		assertColumnEquals(Column.ITEM_ITENTIFIER, "item id");
 		assertColumnEquals(Column.LAST_PRICE, 555);

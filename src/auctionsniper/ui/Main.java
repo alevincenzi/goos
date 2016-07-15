@@ -19,6 +19,7 @@ import auctionsniper.Auction;
 import auctionsniper.AuctionSniper;
 import auctionsniper.SniperListener;
 import auctionsniper.SniperSnapshot;
+import auctionsniper.SniperState;
 import auctionsniper.xmpp.AuctionMessageTranslator;
 import auctionsniper.xmpp.XMPPAuction;
 
@@ -86,8 +87,8 @@ public class Main {
 			snipers.setStatusText(status);
 		}
 		
-		public void sniperStatusChanged(SniperSnapshot state, String statusText){
-			snipers.sniperStatusChanged(state, statusText);
+		public void sniperStatusChanged(SniperSnapshot sniperSnapshot){
+			snipers.sniperStatusChanged(sniperSnapshot);
 		}
 	}
 
@@ -95,10 +96,10 @@ public class Main {
 		
 		private static final long serialVersionUID = 1L;
 
-		private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0);
+		private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.JOINING);
 		
 		private String statusText = MainWindow.STATUS_JOINING;
-		private SniperSnapshot sniperState = STARTING_UP;
+		private SniperSnapshot sniperSnapshot = STARTING_UP;
 		
 		@Override
 		public int getRowCount() {
@@ -115,11 +116,11 @@ public class Main {
 			
 			switch(Column.at(columnIndex)){
 			case ITEM_ITENTIFIER:
-				return sniperState.itemId;
+				return sniperSnapshot.itemId;
 			case LAST_BID:
-				return sniperState.lastBid;
+				return sniperSnapshot.lastBid;
 			case LAST_PRICE:
-				return sniperState.lastPrice;
+				return sniperSnapshot.lastPrice;
 			case SNIPER_STATE:
 				return statusText;
 			default:
@@ -127,9 +128,12 @@ public class Main {
 			}
 		}
 
-		public void sniperStatusChanged(SniperSnapshot newSniperState, String newStatusText){
-			sniperState = newSniperState;
-			statusText = newStatusText;
+		private static String[] STATUS_TEXT = { MainWindow.STATUS_JOINING,
+												MainWindow.STATUS_BIDDING };
+		
+		public void sniperStatusChanged(SniperSnapshot newSniperSnapshot){
+			sniperSnapshot = newSniperSnapshot;
+			statusText = STATUS_TEXT[newSniperSnapshot.state.ordinal()];
 			fireTableRowsUpdated(0, 0);
 		}
 		
@@ -147,10 +151,10 @@ public class Main {
 		}
 
 		@Override
-		public void sniperBidding(final SniperSnapshot state) {
+		public void sniperStateChanged(final SniperSnapshot sniperSnapshot) {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run(){
-					ui.sniperStatusChanged(state, MainWindow.STATUS_BIDDING);
+					ui.sniperStatusChanged(sniperSnapshot);
 				}
 			});
 		}
