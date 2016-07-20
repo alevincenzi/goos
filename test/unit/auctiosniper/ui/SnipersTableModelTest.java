@@ -1,4 +1,4 @@
-package unit;
+package unit.auctiosniper.ui;
 
 import static auctionsniper.SniperState.BIDDING;
 import static auctionsniper.ui.SnipersTableModel.textFor;

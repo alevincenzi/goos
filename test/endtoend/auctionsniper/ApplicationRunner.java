@@ -1,4 +1,4 @@
-package endtoend;
+package endtoend.auctionsniper;
 
 
 import static auctionsniper.ui.SnipersTableModel.textFor;

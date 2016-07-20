@@ -1,4 +1,4 @@
-package unit;
+package unit.auctiosniper.ui;
 
 import static org.junit.Assert.assertEquals;
 
