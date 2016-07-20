@@ -1,4 +1,4 @@
-package auctionsniper.test.unit;
+package unit;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;
@@ -12,7 +12,8 @@ import auctionsniper.AuctionEventListener;
 import auctionsniper.Main;
 import auctionsniper.AuctionEventListener.PriceSource;
 import auctionsniper.xmpp.AuctionMessageTranslator;
-import auctionsniper.test.endtoend.ApplicationRunner;
+
+import endtoend.ApplicationRunner;
 
 @RunWith(JMock.class)
 public class AuctionMessageTranslatorTest {

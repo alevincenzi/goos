@@ -1,4 +1,4 @@
-package auctionsniper.test.endtoend;
+package endtoend;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
