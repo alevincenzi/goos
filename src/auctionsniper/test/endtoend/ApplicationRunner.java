@@ -1,9 +1,11 @@
 package auctionsniper.test.endtoend;
 
 import static auctionsniper.test.endtoend.FakeAuctionServer.*;
+import static auctionsniper.ui.SnipersTableModel.textFor;
 
-import auctionsniper.ui.Main;
-import auctionsniper.ui.Main.MainWindow;
+import auctionsniper.Main;
+import auctionsniper.SniperState;
+import auctionsniper.ui.MainWindow;
 
 public class ApplicationRunner {
 	
@@ -37,23 +39,25 @@ public class ApplicationRunner {
 		thread.start();
 		
 		driver = new AuctionSniperDriver(1000);
-		driver.showsSniperStatus(MainWindow.STATUS_JOINING);
+		driver.hasTitle(MainWindow.APPLICATION_TITLE);
+		driver.hasColumnTitles();
+		driver.showsSniperStatus(textFor(SniperState.JOINING));
 	}
 	
 	public void showsSniperHasLostAuction(){
-		driver.showsSniperStatus(MainWindow.STATUS_LOST);
+		driver.showsSniperStatus(textFor(SniperState.LOST));
 	}
 	
 	public void hasShownSniperIsBidding(int lastPrice, int lastBid) {
-		driver.showsSniperStatus(itemId, lastPrice, lastBid, MainWindow.STATUS_BIDDING);
+		driver.showsSniperStatus(itemId, lastPrice, lastBid, textFor(SniperState.BIDDING));
 	}
 
 	public void hasShownSniperIsWinning(int winningBid) {
-		driver.showsSniperStatus(itemId, winningBid, winningBid, MainWindow.STATUS_WINNING);
+		driver.showsSniperStatus(itemId, winningBid, winningBid, textFor(SniperState.WINNING));
 	}
 	
 	public void showsSniperHasWonAuction(int lastPrice) {
-		driver.showsSniperStatus(itemId, lastPrice, lastPrice, MainWindow.STATUS_WON);
+		driver.showsSniperStatus(itemId, lastPrice, lastPrice, textFor(SniperState.WON));
 	}
 	
 	

@@ -9,10 +9,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import auctionsniper.AuctionEventListener;
+import auctionsniper.Main;
 import auctionsniper.AuctionEventListener.PriceSource;
 import auctionsniper.xmpp.AuctionMessageTranslator;
 import auctionsniper.test.endtoend.ApplicationRunner;
-import auctionsniper.ui.Main;
 
 @RunWith(JMock.class)
 public class AuctionMessageTranslatorTest {

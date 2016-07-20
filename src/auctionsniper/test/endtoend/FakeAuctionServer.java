@@ -14,7 +14,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
-import auctionsniper.ui.Main;
+import auctionsniper.Main;
 
 public class FakeAuctionServer {
 

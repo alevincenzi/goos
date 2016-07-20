@@ -1,7 +1,7 @@
 package auctionsniper.test.unit;
 
 import static auctionsniper.SniperState.BIDDING;
-
+import static auctionsniper.ui.SnipersTableModel.textFor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
@@ -19,8 +19,7 @@ import org.junit.runner.RunWith;
 
 import auctionsniper.SniperSnapshot;
 import auctionsniper.ui.Column;
-import auctionsniper.ui.Main.MainWindow;
-import auctionsniper.ui.Main.SnipersTableModel;
+import auctionsniper.ui.SnipersTableModel;
 
 @RunWith(JMock.class) 
 public class SnipersTableModelTest { 
@@ -43,6 +42,13 @@ public class SnipersTableModelTest {
 		assertThat(model.getColumnCount(), equalTo(Column.values().length));
 	}
 	
+	@Test
+	public void setsUpColumnHeadings() {
+		for (Column column : Column.values()) {
+			assertEquals(column.name,model.getColumnName(column.ordinal()));
+		}
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Test
 	public void setsSniperValuesInColumns() {
@@ -51,13 +57,13 @@ public class SnipersTableModelTest {
 			one(listener).tableChanged(with(aRowChangedEvent()));
 		}});
 
-		model.sniperStatusChanged(
+		model.sniperStateChanged(
 			new SniperSnapshot("item id", 555, 666, BIDDING));
 		
-		assertColumnEquals(Column.ITEM_ITENTIFIER, "item id");
-		assertColumnEquals(Column.LAST_PRICE, 555);
-		assertColumnEquals(Column.LAST_BID, 666);
-		assertColumnEquals(Column.SNIPER_STATE, MainWindow.STATUS_BIDDING);
+		assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");
+		assertColumnEquals(Column.LAST_PRICE,      555);
+		assertColumnEquals(Column.LAST_BID,        666);
+		assertColumnEquals(Column.SNIPER_STATE,    textFor(BIDDING));
 	}
 
 	private void assertColumnEquals(Column column, Object expected) {

@@ -4,7 +4,7 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPException;
 
 import auctionsniper.Auction;
-import auctionsniper.ui.Main;
+import auctionsniper.Main;
 
 public class XMPPAuction implements Auction {
 	
