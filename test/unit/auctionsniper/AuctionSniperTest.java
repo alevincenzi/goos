@@ -110,19 +110,17 @@ public class AuctionSniperTest {
 	@Test
 	public void reportsIsWinningWhenCurrentPriceComesFromSniper(){
 		
-		context.checking(new Expectations() {{
-			ignoring(auction);
-			allowing(sniperListener).sniperStateChanged(
-				with(aSniperThatIs(BIDDING)));
-				then(sniperState.is("bidding"));
-			
-			atLeast(1).of(sniperListener).sniperStateChanged(
-				new SniperSnapshot(ITEM_ID, 135, 135, WINNING));
-				when(sniperState.is("bidding"));
-		}});
-		
-		sniper.currentPrice(123, 12, PriceSource.FromOtherBidder);
-		sniper.currentPrice(123, 45, PriceSource.FromSniper);	
+	    allowingSniperBidding();
+	    ignoringAuction();
+	    
+	    context.checking(new Expectations() {{ 
+	        atLeast(1).of(sniperListener).sniperStateChanged(
+	        		new SniperSnapshot(ITEM_ID, 135, 135, WINNING));
+	        when(sniperState.is("bidding"));
+	    }}); 
+	      
+	    sniper.currentPrice(123, 12, PriceSource.FromOtherBidder);
+	    sniper.currentPrice(135, 45, PriceSource.FromSniper); 	
 	}
 	
 	private void ignoringAuction() {

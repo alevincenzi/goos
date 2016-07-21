@@ -35,7 +35,7 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 	}
 
 	private static String[] STATUS_TEXT = { 
-		"Joining", "Bidding", "Winning", "Lost", "Won"
+		"Joining", "Bidding", "Winning", "Losing", "Lost", "Won", "Failed"
 	};
 	
 	public static String textFor(SniperState state){

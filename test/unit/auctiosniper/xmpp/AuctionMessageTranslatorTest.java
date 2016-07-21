@@ -30,7 +30,7 @@ public class AuctionMessageTranslatorTest {
 	public void notifyAuctionClosedWhenCloseMessageReceived(){
 		
 		context.checking(new Expectations() {{
-			oneOf(listener).auctionClosed();
+			exactly(1).of(listener).auctionClosed();
 		}});
 		
 		Message message = new Message();
