@@ -10,7 +10,9 @@ public class SniperSnapshot {
 	public final int         lastBid;
 	public final SniperState state;
 	
-	public SniperSnapshot(String itemId, int lastPrice, int lastBid, SniperState state){
+	public
+	SniperSnapshot(String itemId, int lastPrice, int lastBid, SniperState state){
+	
 		this.itemId    = itemId;
 		this.lastPrice = lastPrice;
 		this.lastBid   = lastBid;
@@ -18,54 +20,64 @@ public class SniperSnapshot {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
+	public boolean
+	equals(Object obj) {
 	
 		return EqualsBuilder.reflectionEquals(this, obj);
 	}
 	
 	@Override
-	public int hashCode() {
+	public int
+	hashCode() {
 	    
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
 	
 	@Override
-	public String toString() {
+	public String
+	toString() {
 	    
 		return ToStringBuilder.reflectionToString(this);
 	}
 	  
-	public SniperSnapshot bidding(int newLastPrice, int newLastBid){
+	public SniperSnapshot
+	bidding(int newLastPrice, int newLastBid){
 		
 		return new SniperSnapshot(itemId, newLastPrice, newLastBid, SniperState.BIDDING); 
 	}
 	
-	public SniperSnapshot winning(int newLastPrice){
+	public SniperSnapshot
+	winning(int newLastPrice){
 		
 		return new SniperSnapshot(itemId, newLastPrice, lastBid, SniperState.WINNING); 
 	}
 	
-	public static SniperSnapshot joining(String itemId){
+	public static SniperSnapshot
+	joining(String itemId){
 		
 		return new SniperSnapshot(itemId, 0, 0, SniperState.JOINING); 
 	}
 	
-	public SniperSnapshot losing(int newLastPrice) {
+	public SniperSnapshot
+	losing(int newLastPrice) {
 		
 		return new SniperSnapshot(itemId, newLastPrice, lastBid, SniperState.LOSING);
 	}
 	
-	public SniperSnapshot failed() {
+	public SniperSnapshot
+	failed() {
 	
 		return new SniperSnapshot(itemId, 0, 0, SniperState.FAILED);
 	}
 	  
-	public SniperSnapshot closed(){
+	public SniperSnapshot
+	closed(){
 		
 		return new SniperSnapshot(itemId, lastPrice, lastBid, state.whenAuctionClosed()); 
 	}
 	
-	public boolean isForSameItemAs(SniperSnapshot sniperSnapshot) {
+	public boolean
+	isForSameItemAs(SniperSnapshot sniperSnapshot) {
 		
 		return itemId.equals(sniperSnapshot.itemId);
 	}

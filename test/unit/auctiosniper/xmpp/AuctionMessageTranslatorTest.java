@@ -27,7 +27,8 @@ public class AuctionMessageTranslatorTest {
 			new AuctionMessageTranslator(ApplicationRunner.SNIPER_ID, listener);
 
 	@Test
-	public void notifyAuctionClosedWhenCloseMessageReceived(){
+	public void
+	notifyAuctionClosedWhenCloseMessageReceived(){
 		
 		context.checking(new Expectations() {{
 			exactly(1).of(listener).auctionClosed();
@@ -39,29 +40,31 @@ public class AuctionMessageTranslatorTest {
 		translator.processMessage(UNUSED_CHAT, message);
 	}
 	
-	 @Test
-	 public void notifiesBidDetailsWhenCurrentPriceMessageReceivedFromOtherBidder() {
+	@Test
+	public void
+	notifiesBidDetailsWhenCurrentPriceMessageReceivedFromOtherBidder() {
+	 
+		context.checking(new Expectations() {{
+			exactly(1).of(listener).currentPrice(192, 7, PriceSource.FromOtherBidder);
+		}});
 		 
-		 context.checking(new Expectations() {{
-			 exactly(1).of(listener).currentPrice(192, 7, PriceSource.FromOtherBidder);
-		 }});
-		 
-		 Message message = new Message();
-		 message.setBody(String.format(Main.PRICE_EVENT_FORMAT, 192, 7, "Somebody else"));
+		Message message = new Message();
+		message.setBody(String.format(Main.PRICE_EVENT_FORMAT, 192, 7, "Somebody else"));
 			
-		 translator.processMessage(UNUSED_CHAT, message);
+		translator.processMessage(UNUSED_CHAT, message);
 	 }
 	 
 	 @Test
-	 public void notifiesBidDetailsWhenCurrentPriceMessageReceivedFromSniper() {
+	 public void
+	 notifiesBidDetailsWhenCurrentPriceMessageReceivedFromSniper() {
 		 
-		 context.checking(new Expectations() {{
-			 exactly(1).of(listener).currentPrice(234, 5, PriceSource.FromSniper);
-		 }});
+		context.checking(new Expectations() {{
+			exactly(1).of(listener).currentPrice(234, 5, PriceSource.FromSniper);
+		}});
 		 
-		 Message message = new Message();
-		 message.setBody(String.format(Main.PRICE_EVENT_FORMAT, 234, 5, ApplicationRunner.SNIPER_ID));
+		Message message = new Message();
+		message.setBody(String.format(Main.PRICE_EVENT_FORMAT, 234, 5, ApplicationRunner.SNIPER_ID));
 			
-		 translator.processMessage(UNUSED_CHAT, message);
+		translator.processMessage(UNUSED_CHAT, message);
 	 }
 }

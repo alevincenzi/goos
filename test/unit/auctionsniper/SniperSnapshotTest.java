@@ -11,7 +11,8 @@ import auctionsniper.SniperState;
 
 public class SniperSnapshotTest {
 
-  @Test public void
+  @Test
+  public void
   transitionsBetweenStates() {
     
 	final String itemId = "item id";
@@ -45,7 +46,8 @@ public class SniperSnapshotTest {
         bidding.winning(678).closed());  
   }
   
-  @Test public void
+  @Test
+  public void
   comparesItemIdentities() {
     
 	assertTrue(

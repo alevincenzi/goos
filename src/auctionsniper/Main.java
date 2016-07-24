@@ -18,8 +18,7 @@ import auctionsniper.xmpp.XMPPAuction;
 public class Main {
 
 	public static final String JOIN_COMMAND_FORMAT = "";
-	public static final String BID_COMMAND_FORMAT  = "SOLVersion 1.1; Command: Bid; Price: %d;";
-
+	public static final String BID_COMMAND_FORMAT  = "SOLVersion: 1.1; Command: Bid; Price: %d;";
 	public static final String CLOSE_EVENT_FORMAT  = "SOLVersion: 1.1; Event: CLOSE;";
 	public static final String PRICE_EVENT_FORMAT  = "SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;"; 
 	
@@ -38,16 +37,14 @@ public class Main {
 	@SuppressWarnings("unused")
 	private Chat notToBeGarbageCollected;
 
-	public Main() throws Exception {
-		SwingUtilities.invokeAndWait(new Runnable() {
-			@Override
-			public void run() {
-				ui = new MainWindow(snipers);
-			}
-		});
+	public
+	Main() throws Exception {
+		
+		startUserInterface();
 	}
 	
-	public static void main(String ... args) throws Exception {
+	public static void
+	main(String ... args) throws Exception {
 		
 		Main main = new Main();
 		
@@ -57,14 +54,25 @@ public class Main {
 			args[ARG_SNIPER_PSWD]),
 			args[ARG_ITEM_ID]);
 	}
+
+	private void
+	startUserInterface() throws Exception{
 	
+		SwingUtilities.invokeAndWait(new Runnable() {
+			@Override
+			public void run() {
+				ui = new MainWindow(snipers);
+			}
+		});
+	}
+
 	private void
 	joinAuction(final XMPPConnection connection, String itemId) throws XMPPException {
 
 		disconnectWhenUICloses(connection);
 
-		Chat chat = connection.getChatManager().createChat(
-			auctionId(itemId, connection), null);
+		Chat chat = connection.getChatManager()
+			.createChat(auctionId(itemId, connection), null);
 
 		notToBeGarbageCollected = chat;
 		
@@ -81,7 +89,9 @@ public class Main {
 		auction.join();
 	}
 	
-	private void disconnectWhenUICloses(final XMPPConnection connection) {
+	private void
+	disconnectWhenUICloses(final XMPPConnection connection) {
+	
 		ui.addWindowListener(new WindowAdapter(){
 			@Override
 			public void windowClosed(WindowEvent e) {
@@ -99,7 +109,9 @@ public class Main {
 		return connection;
 	}
 	
-	private static String auctionId(String itemId, XMPPConnection connection) {
+	private static String
+	auctionId(String itemId, XMPPConnection connection) {
+	
 		return String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 	}
 }

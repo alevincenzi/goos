@@ -19,7 +19,8 @@ import auctionsniper.ui.MainWindow;
 public class AuctionSniperDriver extends JFrameDriver {
 
 	@SuppressWarnings("unchecked")
-	public AuctionSniperDriver(int timeoutMilliSeconds) {
+	public
+	AuctionSniperDriver(int timeoutMilliSeconds) {
 		
 		super(
 				new GesturePerformer(),
@@ -33,16 +34,15 @@ public class AuctionSniperDriver extends JFrameDriver {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void showsSniperStatus(String statusText){
+	public void
+	showsSniperStatus(String statusText){
+	
 		new JTableDriver(this).hasCell(withLabelText(equalTo(statusText)));
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void showsSniperStatus(
-		String itemId,
-		int    lastPrice,
-		int    lastBid,
-		String statusText){
+	public void
+	showsSniperStatus(String itemId, int lastPrice, int lastBid, String statusText){
 		
 		JTableDriver table = new JTableDriver(this);
 		
@@ -52,7 +52,9 @@ public class AuctionSniperDriver extends JFrameDriver {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void hasColumnTitles() {
+	public void
+	hasColumnTitles() {
+	
 		JTableHeaderDriver headers = new JTableHeaderDriver(this, JTableHeader.class);
 		
 		headers.hasHeaders(matching(

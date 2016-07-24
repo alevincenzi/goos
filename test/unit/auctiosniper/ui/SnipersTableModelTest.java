@@ -1,7 +1,7 @@
 package unit.auctiosniper.ui;
 
 import static auctionsniper.SniperState.BIDDING;
-import static auctionsniper.ui.SnipersTableModel.textFor;
+import static auctionsniper.SniperState.textFor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
@@ -33,17 +33,23 @@ public class SnipersTableModelTest {
 			new SnipersTableModel();
 	
 	@Before
-	public void attachModelListener() {
+	public void
+	attachModelListener() {
+	
 		model.addTableModelListener(listener);
 	}
 	
 	@Test
-	public void hasEnoughColumns() {
+	public void
+	hasEnoughColumns() {
+	
 		assertThat(model.getColumnCount(), equalTo(Column.values().length));
 	}
 	
 	@Test
-	public void setsUpColumnHeadings() {
+	public void
+	setsUpColumnHeadings() {
+	
 		for (Column column : Column.values()) {
 			assertEquals(column.name,model.getColumnName(column.ordinal()));
 		}
@@ -51,7 +57,8 @@ public class SnipersTableModelTest {
 	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void setsSniperValuesInColumns() {
+	public void
+	setsSniperValuesInColumns() {
 		
 		context.checking(new Expectations() {{
 			one(listener).tableChanged(with(aRowChangedEvent()));
@@ -66,14 +73,17 @@ public class SnipersTableModelTest {
 		assertColumnEquals(Column.SNIPER_STATE,    textFor(BIDDING));
 	}
 
-	private void assertColumnEquals(Column column, Object expected) {
+	private void
+	assertColumnEquals(Column column, Object expected) {
 		
 		final int rowIndex = 0;
 		final int columnIndex = column.ordinal();
 		assertEquals(expected, model.getValueAt(rowIndex,  columnIndex));
 	}
 	
-	private Matcher<TableModelEvent> aRowChangedEvent() {
+	private Matcher<TableModelEvent>
+	aRowChangedEvent() {
+	
 		return samePropertyValuesAs(new TableModelEvent(model, 0));
 	}	
 }

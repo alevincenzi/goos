@@ -10,7 +10,8 @@ import auctionsniper.ui.Column;
 
 public class ColumnTest {
 
-  @Test public void
+  @Test
+  public void
   retrievesValuesFromASniperSnapshot() {
     
 	SniperSnapshot snapshot = new SniperSnapshot("item", 123, 34, SniperState.BIDDING);

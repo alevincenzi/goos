@@ -9,7 +9,8 @@ public class AuctionSniperEndToEndTest {
 	private final ApplicationRunner application = new ApplicationRunner();
 	
 	@Test
-	public void sniperJoinsAuctionUntilAuctionCloses() throws Exception {
+	public void
+	sniperJoinsAuctionUntilAuctionCloses() throws Exception {
 		
 		auction.startSellingItem();
 		
@@ -23,7 +24,8 @@ public class AuctionSniperEndToEndTest {
 	
 	
 	@Test
-	public void sniperMakesAHigherBidButLoses() throws Exception {
+	public void
+	sniperMakesAHigherBidButLoses() throws Exception {
 
 		auction.startSellingItem();
 		
@@ -40,7 +42,8 @@ public class AuctionSniperEndToEndTest {
 	}
 	
 	@Test
-	public void sniperWinsAnAuctionByBiddingHigher() throws Exception {
+	public void
+	sniperWinsAnAuctionByBiddingHigher() throws Exception {
 		
 		auction.startSellingItem();
 		
@@ -61,12 +64,16 @@ public class AuctionSniperEndToEndTest {
 	
 	
 	@After
-	public void stopAuction() {
+	public void
+	stopAuction() {
+		
 		auction.stop();
 	}
 	
 	@After
-	public void stopApplication() {
+	public void
+	stopApplication() {
+		
 		application.stop();
 	}
 

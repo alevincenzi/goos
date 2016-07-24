@@ -44,7 +44,8 @@ public class AuctionSniperTest {
 			context.states("sniper");
 	
 	@Test
-	public void reportsLostWhenAuctionClosesImmediately(){
+	public void
+	reportsLostWhenAuctionClosesImmediately(){
 		
 		context.checking(new Expectations() {{
 			atLeast(1).of(sniperListener).sniperStateChanged(
@@ -54,7 +55,9 @@ public class AuctionSniperTest {
 		sniper.auctionClosed();
 	}
 	
-	public void reportsLostIfAuctionClosesWhenBidding(){
+	@Test
+	public void
+	reportsLostIfAuctionClosesWhenBidding(){
 
 	    allowingSniperBidding();
 	    ignoringAuction();
@@ -71,7 +74,8 @@ public class AuctionSniperTest {
 	}
 	
 	@Test
-	public void reportsWonIfAuctionClosesWhenWinning(){
+	public void
+	reportsWonIfAuctionClosesWhenWinning(){
 	    
 		allowingSniperBidding();
 	    allowingSniperWinning();
@@ -91,7 +95,8 @@ public class AuctionSniperTest {
 	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void bidsHigherAndReportsBiddingWhenNewPriceArrives(){
+	public void
+	bidsHigherAndReportsBiddingWhenNewPriceArrives(){
 	    
 		final int price = 1001; 
 	    final int increment = 25; 
@@ -108,7 +113,8 @@ public class AuctionSniperTest {
 	}
 	
 	@Test
-	public void reportsIsWinningWhenCurrentPriceComesFromSniper(){
+	public void
+	reportsIsWinningWhenCurrentPriceComesFromSniper(){
 		
 	    allowingSniperBidding();
 	    ignoringAuction();
@@ -123,21 +129,29 @@ public class AuctionSniperTest {
 	    sniper.currentPrice(135, 45, PriceSource.FromSniper); 	
 	}
 	
-	private void ignoringAuction() {
+	private void
+	ignoringAuction() {
+	
 		context.checking(new Expectations() {{ 
 			ignoring(auction);
 		}});
 	}
 	
-	private void allowingSniperBidding() {
+	private void
+	allowingSniperBidding() {
+	
 		allowSniperStateChange(BIDDING, "bidding");
 	}
 
-	private void allowingSniperWinning() {
+	private void
+	allowingSniperWinning() {
+	
 		allowSniperStateChange(WINNING, "winning");
 	}
 
-	private void allowSniperStateChange(final SniperState newState, final String oldState) {
+	private void
+	allowSniperStateChange(final SniperState newState, final String oldState) {
+	
 		context.checking(new Expectations() {{ 
 			allowing(sniperListener).sniperStateChanged(
 					with(aSniperThatIs(newState)));
@@ -145,7 +159,8 @@ public class AuctionSniperTest {
 		 }});
 	}
 		  
-	private Matcher<SniperSnapshot> aSniperThatIs(final SniperState state){
+	private Matcher<SniperSnapshot>
+	aSniperThatIs(final SniperState state){
 		
 		return new FeatureMatcher<SniperSnapshot, SniperState>(
 				equalTo(state), "sniper that is ", "was")

@@ -21,8 +21,10 @@ public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	public MainWindow(SnipersTableModel snipers) {
-		super("Auction Sniper");
+	public
+	MainWindow(SnipersTableModel snipers) {
+		
+		super(APPLICATION_TITLE);
 		
 		this.snipers = snipers;
 		
@@ -33,20 +35,26 @@ public class MainWindow extends JFrame {
 		setVisible(true);
 	}
 	
-	private void fillContentPane(JTable snipersTable){
+	private void
+	fillContentPane(JTable snipersTable){
+	
 		final Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 		
 		contentPane.add(new JScrollPane(snipersTable), BorderLayout.CENTER);
 	}
 	
-	private JTable makeSnipersTable(){
+	private JTable
+	makeSnipersTable(){
+	
 		final JTable snipersTable = new JTable(snipers);
 		snipersTable.setName(SNIPERS_TABLE_NAME);
 		return snipersTable;
 	}
 	
-	public void sniperStatusChanged(SniperSnapshot snapshot){
+	public void
+	sniperStatusChanged(SniperSnapshot snapshot){
+	
 		snipers.sniperStateChanged(snapshot);
 	}
 }

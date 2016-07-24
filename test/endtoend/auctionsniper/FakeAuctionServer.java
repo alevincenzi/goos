@@ -28,13 +28,15 @@ public class FakeAuctionServer {
 	private final XMPPConnection connection;
 	private Chat currentChat;
 	
-	public FakeAuctionServer(String itemId){
+	public
+	FakeAuctionServer(String itemId){
 		
 		this.itemId = itemId;
 		this.connection = new XMPPConnection(XMPP_HOSTNAME);
 	}
 	
-	public void startSellingItem() throws XMPPException {
+	public void
+	startSellingItem() throws XMPPException {
 		
 		connection.connect();
 		connection.login(
@@ -52,36 +54,50 @@ public class FakeAuctionServer {
 	}
 	
 	
-	public void reportPrice(int price, int increment, String bidder) throws XMPPException {
+	public void
+	reportPrice(int price, int increment, String bidder) throws XMPPException {
+	
 		currentChat.sendMessage(String.format(Main.PRICE_EVENT_FORMAT, price, increment, bidder));
 	}
 	
 	
-	public String getItemId(){
+	public String
+	getItemId(){
+	
 		return itemId;
 	}
 	
-	public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException{
+	public void
+	hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException{
+	
 		receivesAMessageMatching(
 			sniperId, equalTo(Main.JOIN_COMMAND_FORMAT));
 	}
 	
-	public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+	public void
+	hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+	
 		receivesAMessageMatching(
 			sniperId, equalTo(String.format(Main.BID_COMMAND_FORMAT, bid)));
 	}
 		
 		
-	public void	receivesAMessageMatching(String sniperId, Matcher<? super String> messageMatcher) throws InterruptedException{
+	public void
+	receivesAMessageMatching(String sniperId, Matcher<? super String> messageMatcher) throws InterruptedException{
+	
 		messageListener.receivesAMessage(messageMatcher);
 		assertThat(currentChat.getParticipant(), equalTo(sniperId));
 	}
 	
-	public void announceClosed() throws XMPPException{
+	public void
+	announceClosed() throws XMPPException{
+	
 		currentChat.sendMessage(Main.CLOSE_EVENT_FORMAT);
 	}
 	
-	public void stop(){
+	public void
+	stop(){
+	
 		connection.disconnect();
 	}
 }
@@ -92,11 +108,15 @@ class SingleMessageListener implements MessageListener {
 			new ArrayBlockingQueue<Message>(1);
 	
 	@Override
-	public void processMessage(Chat chat, Message message) {
+	public void
+	processMessage(Chat chat, Message message) {
+	
 		messages.add(message);
 	}
 	
-	public void receivesAMessage(Matcher<? super String> messageMatcher) throws InterruptedException {
+	public void
+	receivesAMessage(Matcher<? super String> messageMatcher) throws InterruptedException {
+	
 		final Message message = messages.poll(5, TimeUnit.SECONDS);
 		assertThat("Message", message, is(notNullValue()));
 		assertThat(message.getBody(), messageMatcher);
