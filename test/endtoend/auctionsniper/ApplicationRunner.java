@@ -40,10 +40,8 @@ public class ApplicationRunner {
 		driver.hasColumnTitles();
 
 		for (FakeAuctionServer auction : auctions) {
-			driver.showsSniperStatus(textFor(SniperState.JOINING));
-// FIXME this should be used instead ...
-//			driver.showsSniperStatus(
-//				auction.getItemId(), 0, 0, textFor(SniperState.JOINING));
+			driver.showsSniperStatus(
+				auction.getItemId(), 0, 0, textFor(SniperState.JOINING));
 		}
 	}
 	
@@ -64,9 +62,10 @@ public class ApplicationRunner {
 	}
 	
 	public void
-	hasShownSniperHasLostAuction(){
-
-		driver.showsSniperStatus(textFor(SniperState.LOST));
+	hasShownSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
+		
+	    driver.showsSniperStatus(
+	    	auction.getItemId(), lastPrice, lastBid, textFor(SniperState.LOST));
 	}
 	
 	public void

@@ -1,7 +1,5 @@
 package endtoend.auctionsniper;
 
-import static org.hamcrest.Matchers.equalTo;
-
 import javax.swing.table.JTableHeader;
 
 import static com.objogate.wl.swing.matcher.IterableComponentsMatcher.matching;
@@ -33,13 +31,6 @@ public class AuctionSniperDriver extends JFrameDriver {
 		);
 	}
 
-	@SuppressWarnings("unchecked")
-	public void
-	showsSniperStatus(String statusText){
-	
-		new JTableDriver(this).hasCell(withLabelText(equalTo(statusText)));
-	}
-	
 	@SuppressWarnings("unchecked")
 	public void
 	showsSniperStatus(String itemId, int lastPrice, int lastBid, String statusText){
