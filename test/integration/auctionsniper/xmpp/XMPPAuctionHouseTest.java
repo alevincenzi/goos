@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.CountDownLatch;
 
-import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.junit.After;
 import org.junit.Before;
@@ -13,34 +12,34 @@ import org.junit.Test;
 
 import auctionsniper.Auction;
 import auctionsniper.AuctionEventListener;
-import auctionsniper.Main;
-import auctionsniper.xmpp.XMPPAuction;
+import auctionsniper.xmpp.XMPPAuctionException;
+import auctionsniper.xmpp.XMPPAuctionHouse;
 import endtoend.auctionsniper.ApplicationRunner;
 import endtoend.auctionsniper.FakeAuctionServer;
 
-public class XMPPAuctionTest {
+public class XMPPAuctionHouseTest {
 
 	private final FakeAuctionServer server
 		= new FakeAuctionServer("item-54321"); 
 	  
-	private XMPPConnection connection;
+	private XMPPAuctionHouse auctionHouse;
 	  
 	@Before
 	public void
-	openConnection() throws XMPPException {
+	openConnection() throws XMPPAuctionException {
 		
-		connection = Main.connectTo(
-				FakeAuctionServer.XMPP_HOSTNAME,
-				ApplicationRunner.SNIPER_ID,
-				ApplicationRunner.SNIPER_PASSWORD);
+		auctionHouse = XMPPAuctionHouse.connect(
+			FakeAuctionServer.XMPP_HOSTNAME,
+			ApplicationRunner.SNIPER_ID,
+			ApplicationRunner.SNIPER_PASSWORD);
 	}
 		
 	@After
 	public void
 	closeConnection() {
 	
-		if (connection != null) {
-			connection.disconnect();
+		if (auctionHouse != null) {
+			auctionHouse.disconnect();
 		}
 	}
 	  
@@ -63,7 +62,7 @@ public class XMPPAuctionTest {
 	  
 		CountDownLatch auctionWasClosed = new CountDownLatch(1); 
 	    
-	    Auction auction = new XMPPAuction(connection, server.getItemId());
+	    Auction auction = auctionHouse.auctionFor(server.getItemId());
 	    auction.addAuctionEventListener(auctionClosedListener(auctionWasClosed));
 	    
 	    auction.join(); 

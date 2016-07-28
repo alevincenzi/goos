@@ -15,10 +15,6 @@ public class XMPPAuction implements Auction {
 	public static final String CLOSE_EVENT_FORMAT  = "SOLVersion: 1.1; Event: CLOSE;";
 	public static final String PRICE_EVENT_FORMAT  = "SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;"; 
 	
-	public static final String AUCTION_RESOURCE  = "Auction";
-	public static final String ITEM_ID_AS_LOGIN  = "auction-%s";
-	public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
-
 	private final Announcer<AuctionEventListener> auctionEventListeners
 		= Announcer.to(AuctionEventListener.class);
 			
@@ -35,7 +31,7 @@ public class XMPPAuction implements Auction {
 	private static String
 	auctionId(String itemId, XMPPConnection connection){
 		
-		return String.format(AUCTION_ID_FORMAT,  itemId, connection.getServiceName());
+		return String.format(XMPPAuctionHouse.AUCTION_ID_FORMAT,  itemId, connection.getServiceName());
 	}
 	
 	@Override

@@ -6,13 +6,10 @@ import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
-
 import auctionsniper.ui.MainWindow;
 import auctionsniper.ui.SnipersTableModel;
 import auctionsniper.ui.SwingThreadSniperListener;
-import auctionsniper.xmpp.XMPPAuction;
+import auctionsniper.xmpp.XMPPAuctionHouse;
 
 public class Main {
 
@@ -36,11 +33,11 @@ public class Main {
 		
 		Main main = new Main();
 		
-		XMPPConnection connection =
-				connectTo(args[ARG_XMPP_HOSTNAME], args[ARG_SNIPER_ID], args[ARG_SNIPER_PSWD]);
+		XMPPAuctionHouse auctionHouse =
+				XMPPAuctionHouse.connect(args[ARG_XMPP_HOSTNAME], args[ARG_SNIPER_ID], args[ARG_SNIPER_PSWD]);
 		
-		main.disconnectWhenUICloses(connection);
-		main.addUserRequestListenerFor(connection);
+		main.disconnectWhenUICloses(auctionHouse);
+		main.addUserRequestListenerFor(auctionHouse);
 	}
 
 	private void
@@ -55,17 +52,17 @@ public class Main {
 	}
 
 	private void
-	disconnectWhenUICloses(final XMPPConnection connection) {
+	disconnectWhenUICloses(final XMPPAuctionHouse auctionHouse) {
 	
 		ui.addWindowListener(new WindowAdapter(){
 			@Override
 			public void windowClosed(WindowEvent e) {
-				connection.disconnect();
+				auctionHouse.disconnect();
 			}
 		});
 	}
 	
-	private void addUserRequestListenerFor(XMPPConnection connection) {
+	private void addUserRequestListenerFor(final XMPPAuctionHouse auctionHouse) {
 	
 		ui.addUserRequestListener(new UserRequestListener() {
 			
@@ -74,7 +71,7 @@ public class Main {
 			
 				snipers.addSniper(SniperSnapshot.joining(itemId));
 				
-				Auction auction = new XMPPAuction(connection, itemId);
+				Auction auction = auctionHouse.auctionFor(itemId);
 
 				notToBeGarbageCollected.add(auction);
 				
@@ -84,14 +81,5 @@ public class Main {
 				auction.join();
 			}
 		});
-	}
-	
-	public static XMPPConnection
-	connectTo(String hostname, String username, String password) throws XMPPException {
-	
-		XMPPConnection connection = new XMPPConnection(hostname);
-		connection.connect();
-		connection.login(username, password, XMPPAuction.AUCTION_RESOURCE);
-		return connection;
 	}
 }
