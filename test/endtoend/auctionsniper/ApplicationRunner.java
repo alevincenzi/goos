@@ -18,13 +18,27 @@ public class ApplicationRunner {
 	public void
 	startBiddingIn(final FakeAuctionServer... auctions){
 		
+		startSniper();
+		
+		for (FakeAuctionServer auction : auctions) {
+			
+			driver.startBiddingFor(auction.getItemId());
+			
+			driver.showsSniperStatus(
+				auction.getItemId(), 0, 0, textFor(SniperState.JOINING));
+		}
+	}
+	
+	private void
+	startSniper() {
+		
 		Thread thread = new Thread("Test application") {
 			
 			@Override
 			public void run(){
 				
 				try {
-					Main.main(arguments(auctions));
+					Main.main(FakeAuctionServer.XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD);
 				}
 				catch(Exception e){
 					e.printStackTrace();
@@ -38,11 +52,6 @@ public class ApplicationRunner {
 		driver = new AuctionSniperDriver(1000);
 		driver.hasTitle(MainWindow.APPLICATION_TITLE);
 		driver.hasColumnTitles();
-
-		for (FakeAuctionServer auction : auctions) {
-			driver.showsSniperStatus(
-				auction.getItemId(), 0, 0, textFor(SniperState.JOINING));
-		}
 	}
 	
 	protected static String[]

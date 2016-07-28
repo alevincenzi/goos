@@ -9,7 +9,7 @@ A small exercise on TDD
 - ~~Single item: join, bid and win~~
 - ~~Single item: Show price details~~
 - ~~Multiple items~~
-- Add items through the user interface
+- ~~Add items through the user interface~~
 - Stop bidding at the stop price
 - Translator, invalid message from Auction
 - Translator, incorrect message version

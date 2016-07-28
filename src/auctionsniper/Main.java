@@ -30,7 +30,6 @@ public class Main {
 	private static final int ARG_XMPP_HOSTNAME = 0; 
 	private static final int ARG_SNIPER_ID     = 1; 
 	private static final int ARG_SNIPER_PSWD   = 2; 
-	private static final int ARG_ITEM_ID       = 3; 
 	
 	private final SnipersTableModel snipers = new SnipersTableModel();
 	private MainWindow ui;
@@ -52,10 +51,7 @@ public class Main {
 				connectTo(args[ARG_XMPP_HOSTNAME], args[ARG_SNIPER_ID], args[ARG_SNIPER_PSWD]);
 		
 		main.disconnectWhenUICloses(connection);
-		
-		for (int i = ARG_ITEM_ID; i < args.length ; i++) {
-			main.joinAuction(connection, args[i]);
-		}
+		main.addUserRequestListenerFor(connection);
 	}
 
 	private void
@@ -70,35 +66,42 @@ public class Main {
 	}
 
 	private void
-	joinAuction(final XMPPConnection connection, String itemId) throws Exception {
-
-		safelyAddItemToModel(itemId);
-		
-		Chat chat = connection.getChatManager()
-			.createChat(auctionId(itemId, connection), null);
-
-		notToBeGarbageCollected.add(chat);
-		
-		Auction auction = new XMPPAuction(chat);
-		
-		chat.addMessageListener(
-			new AuctionMessageTranslator(
-				connection.getUser(),
-				new AuctionSniper(
-					itemId,
-					auction,
-					new SwingThreadSniperListener(snipers))));		
-		
-		auction.join();
-	}
-	
-	private void
 	disconnectWhenUICloses(final XMPPConnection connection) {
 	
 		ui.addWindowListener(new WindowAdapter(){
 			@Override
 			public void windowClosed(WindowEvent e) {
 				connection.disconnect();
+			}
+		});
+	}
+	
+	private void addUserRequestListenerFor(XMPPConnection connection) {
+	
+		ui.addUserRequestListener(new UserRequestListener() {
+			
+			@Override
+			public void joinAuction(String itemId) {
+
+				snipers.addSniper(SniperSnapshot.joining(itemId));
+				
+				Chat chat = connection.getChatManager()
+						.createChat(auctionId(itemId, connection), null);
+				
+
+				notToBeGarbageCollected.add(chat);
+				
+				Auction auction = new XMPPAuction(chat);
+
+				chat.addMessageListener(
+						new AuctionMessageTranslator(
+							connection.getUser(),
+							new AuctionSniper(
+								itemId,
+								auction,
+								new SwingThreadSniperListener(snipers))));		
+					
+				auction.join();
 			}
 		});
 	}
@@ -110,18 +113,6 @@ public class Main {
 		connection.connect();
 		connection.login(username, password, AUCTION_RESOURCE);
 		return connection;
-	}
-	
-	private void
-	safelyAddItemToModel(final String itemId) throws Exception {
-		
-		SwingUtilities.invokeAndWait( new Runnable() {
-
-			@Override
-			public void run() {
-				snipers.addSniper(SniperSnapshot.joining(itemId));
-			}
-		});
 	}
 	
 	private static String
