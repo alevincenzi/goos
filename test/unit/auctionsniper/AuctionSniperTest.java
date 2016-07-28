@@ -93,7 +93,6 @@ public class AuctionSniperTest {
 	    sniper.auctionClosed(); 
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Test
 	public void
 	bidsHigherAndReportsBiddingWhenNewPriceArrives(){

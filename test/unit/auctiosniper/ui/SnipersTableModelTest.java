@@ -56,7 +56,6 @@ public class SnipersTableModelTest {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Test
 	public void
 	setsSniperValuesInColumns() {
@@ -77,7 +76,6 @@ public class SnipersTableModelTest {
 		assertRowMatchesSnapshot(0,  bidding);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void
 	notifiesListenersWhenAddingASniper() {

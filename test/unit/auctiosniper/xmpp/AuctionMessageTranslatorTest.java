@@ -9,9 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import auctionsniper.AuctionEventListener;
-import auctionsniper.Main;
 import auctionsniper.AuctionEventListener.PriceSource;
 import auctionsniper.xmpp.AuctionMessageTranslator;
+import auctionsniper.xmpp.XMPPAuction;
 import endtoend.auctionsniper.ApplicationRunner;
 
 @RunWith(JMock.class)
@@ -35,7 +35,7 @@ public class AuctionMessageTranslatorTest {
 		}});
 		
 		Message message = new Message();
-		message.setBody(Main.CLOSE_EVENT_FORMAT);
+		message.setBody(XMPPAuction.CLOSE_EVENT_FORMAT);
 		
 		translator.processMessage(UNUSED_CHAT, message);
 	}
@@ -49,7 +49,7 @@ public class AuctionMessageTranslatorTest {
 		}});
 		 
 		Message message = new Message();
-		message.setBody(String.format(Main.PRICE_EVENT_FORMAT, 192, 7, "Somebody else"));
+		message.setBody(String.format(XMPPAuction.PRICE_EVENT_FORMAT, 192, 7, "Somebody else"));
 			
 		translator.processMessage(UNUSED_CHAT, message);
 	 }
@@ -63,7 +63,7 @@ public class AuctionMessageTranslatorTest {
 		}});
 		 
 		Message message = new Message();
-		message.setBody(String.format(Main.PRICE_EVENT_FORMAT, 234, 5, ApplicationRunner.SNIPER_ID));
+		message.setBody(String.format(XMPPAuction.PRICE_EVENT_FORMAT, 234, 5, ApplicationRunner.SNIPER_ID));
 			
 		translator.processMessage(UNUSED_CHAT, message);
 	 }

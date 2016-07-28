@@ -54,22 +54,6 @@ public class ApplicationRunner {
 		driver.hasColumnTitles();
 	}
 	
-	protected static String[]
-	arguments(FakeAuctionServer... auctions) {
-		
-		String[] arguments = new String[auctions.length  + 3];
-		
-		arguments[0] = FakeAuctionServer.XMPP_HOSTNAME;
-		arguments[1] = SNIPER_ID;
-		arguments[2] = SNIPER_PASSWORD;
-		
-		for (int i = 0; i < auctions.length; i++) {
-			arguments[i + 3] = auctions[i].getItemId();
-		}
-		
-		return arguments;
-	}
-	
 	public void
 	hasShownSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
 		

@@ -1,33 +1,62 @@
 package auctionsniper.xmpp;
 
 import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 import auctionsniper.Auction;
-import auctionsniper.Main;
+import auctionsniper.AuctionEventListener;
+import auctionsniper.util.Announcer;
 
 public class XMPPAuction implements Auction {
 	
+	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: Join;";
+	public static final String BID_COMMAND_FORMAT  = "SOLVersion: 1.1; Command: Bid; Price: %d;";
+	public static final String CLOSE_EVENT_FORMAT  = "SOLVersion: 1.1; Event: CLOSE;";
+	public static final String PRICE_EVENT_FORMAT  = "SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;"; 
+	
+	public static final String AUCTION_RESOURCE  = "Auction";
+	public static final String ITEM_ID_AS_LOGIN  = "auction-%s";
+	public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
+
+	private final Announcer<AuctionEventListener> auctionEventListeners
+		= Announcer.to(AuctionEventListener.class);
+			
 	private final Chat chat;
 	
 	public
-	XMPPAuction(Chat chat) {
+	XMPPAuction(XMPPConnection connection, String itemId) {
 	
-		this.chat = chat;
+		chat = connection.getChatManager().createChat(
+				auctionId(itemId, connection),
+				new AuctionMessageTranslator(connection.getUser(), auctionEventListeners.announce()));
+	}
+
+	private static String
+	auctionId(String itemId, XMPPConnection connection){
+		
+		return String.format(AUCTION_ID_FORMAT,  itemId, connection.getServiceName());
+	}
+	
+	@Override
+	public void
+	addAuctionEventListener(AuctionEventListener auctionEventListener) {
+	
+		auctionEventListeners.addListener(auctionEventListener);
 	}
 
 	@Override
 	public void
 	bid(int amount) {
 	
-		sendMessage(String.format(Main.BID_COMMAND_FORMAT, amount));
+		sendMessage(String.format(BID_COMMAND_FORMAT, amount));
 	}
 
 	@Override
 	public void
 	join() {
 	
-		sendMessage(Main.JOIN_COMMAND_FORMAT);
+		sendMessage(JOIN_COMMAND_FORMAT);
 	}
 	
 	private void

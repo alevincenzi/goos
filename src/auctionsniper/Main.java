@@ -6,27 +6,16 @@ import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
-import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 import auctionsniper.ui.MainWindow;
 import auctionsniper.ui.SnipersTableModel;
 import auctionsniper.ui.SwingThreadSniperListener;
-import auctionsniper.xmpp.AuctionMessageTranslator;
 import auctionsniper.xmpp.XMPPAuction;
 
 public class Main {
 
-	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: Join;";
-	public static final String BID_COMMAND_FORMAT  = "SOLVersion: 1.1; Command: Bid; Price: %d;";
-	public static final String CLOSE_EVENT_FORMAT  = "SOLVersion: 1.1; Event: CLOSE;";
-	public static final String PRICE_EVENT_FORMAT  = "SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;"; 
-	
-	private static final String AUCTION_RESOURCE  = "Auction";
-	private static final String ITEM_ID_AS_LOGIN  = "auction-%s";
-	private static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
-	
 	private static final int ARG_XMPP_HOSTNAME = 0; 
 	private static final int ARG_SNIPER_ID     = 1; 
 	private static final int ARG_SNIPER_PSWD   = 2; 
@@ -34,7 +23,7 @@ public class Main {
 	private final SnipersTableModel snipers = new SnipersTableModel();
 	private MainWindow ui;
 	
-	private ArrayList<Chat> notToBeGarbageCollected = new ArrayList<Chat>();
+	private ArrayList<Auction> notToBeGarbageCollected = new ArrayList<Auction>();
 
 	public
 	Main() throws Exception {
@@ -82,42 +71,27 @@ public class Main {
 			
 			@Override
 			public void joinAuction(String itemId) {
-
+			
 				snipers.addSniper(SniperSnapshot.joining(itemId));
 				
-				Chat chat = connection.getChatManager()
-						.createChat(auctionId(itemId, connection), null);
-				
+				Auction auction = new XMPPAuction(connection, itemId);
 
-				notToBeGarbageCollected.add(chat);
+				notToBeGarbageCollected.add(auction);
 				
-				Auction auction = new XMPPAuction(chat);
-
-				chat.addMessageListener(
-						new AuctionMessageTranslator(
-							connection.getUser(),
-							new AuctionSniper(
-								itemId,
-								auction,
-								new SwingThreadSniperListener(snipers))));		
+				auction.addAuctionEventListener(
+					new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers)));		
 					
 				auction.join();
 			}
 		});
 	}
 	
-	private static XMPPConnection
+	public static XMPPConnection
 	connectTo(String hostname, String username, String password) throws XMPPException {
 	
 		XMPPConnection connection = new XMPPConnection(hostname);
 		connection.connect();
-		connection.login(username, password, AUCTION_RESOURCE);
+		connection.login(username, password, XMPPAuction.AUCTION_RESOURCE);
 		return connection;
-	}
-	
-	private static String
-	auctionId(String itemId, XMPPConnection connection) {
-	
-		return String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 	}
 }
