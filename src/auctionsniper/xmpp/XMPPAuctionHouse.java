@@ -10,7 +10,7 @@ public class XMPPAuctionHouse implements AuctionHouse {
 
 	private static final String AUCTION_RESOURCE  = "Auction";
 	private static final String ITEM_ID_AS_LOGIN  = "auction-%s";
-	public  static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
+	private static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 	
 	private final XMPPConnection connection;
 	  
@@ -23,12 +23,18 @@ public class XMPPAuctionHouse implements AuctionHouse {
 	@Override
 	public Auction auctionFor(String itemId) {
 
-		return new XMPPAuction(connection, itemId);
+		return new XMPPAuction(connection, auctionId(itemId, connection));
 	}
 
+	private static String
+	auctionId(String itemId, XMPPConnection connection){
+		
+		return String.format(AUCTION_ID_FORMAT,  itemId, connection.getServiceName());
+	}
+	
 	public void disconnect() {
 	
-		  connection.disconnect();
+		connection.disconnect();
 	}
 	  
 	public static XMPPAuctionHouse

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
+import auctionsniper.AuctionSniper;
 import auctionsniper.SniperListener;
+import auctionsniper.SniperPortfolio.PortfolioListener;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.util.Defect;
 
-public class SnipersTableModel extends AbstractTableModel implements SniperListener {
+public class SnipersTableModel extends AbstractTableModel implements SniperListener, PortfolioListener {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -42,29 +44,33 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 		return Column.at(columnIndex).valueIn(snapshots.get(rowIndex));
 	}
 
-	public void addSniper(SniperSnapshot newSnapshot) {
+	@Override
+	public void sniperAdded(AuctionSniper sniper) {
 
-		snapshots.add(newSnapshot);
-		fireTableRowsInserted(snapshots.size() - 1, snapshots.size() - 1);
+		addSniperSnapshot(sniper.getSnapshot());	
+		sniper.addSniperListener(new SwingThreadSniperListener(this));
+	}
+
+	private void
+	addSniperSnapshot(SniperSnapshot sniperSnapshot) {
+
+		snapshots.add(sniperSnapshot);
+		int row = snapshots.size() - 1; 
+		fireTableRowsInserted(row, row);
 	}
 	
 	public void
 	sniperStateChanged(SniperSnapshot snapshot){
-	
-		int row = rowMatching(snapshot);
-		snapshots.set(row, snapshot);
-		fireTableRowsUpdated(row, row);
-	}
-
-	private int
-	rowMatching(SniperSnapshot snapshot){
 		
-		for (int i = 0; i < snapshots.size(); i++){
+		for (int i = 0; i < snapshots.size(); i++) {
 			if (snapshot.isForSameItemAs(snapshots.get(i))) {
-				return i;
-			}
-		}
-		throw new Defect("Cannot find match for " + snapshot);
+				snapshots.set(i, snapshot); 
+				fireTableRowsUpdated(i, i);
+				return;
+	        }
+	    }
+	    
+		throw new Defect("No existing Sniper state for " + snapshot.itemId);
 	}
 }
 

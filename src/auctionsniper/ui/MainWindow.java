@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import auctionsniper.SniperSnapshot;
+import auctionsniper.SniperPortfolio;
 import auctionsniper.UserRequestListener;
 import auctionsniper.ui.SnipersTableModel;
 import auctionsniper.util.Announcer;
@@ -29,39 +29,41 @@ public class MainWindow extends JFrame {
 	public static final String NEW_ITEM_ID_NAME   = "item id";
 	public static final String JOIN_BUTTON_NAME   = "join button";
 	  
-	private final SnipersTableModel snipers;
-
 	private final Announcer<UserRequestListener> userRequests
 		= Announcer.to(UserRequestListener.class);
 	
 	public
-	MainWindow(SnipersTableModel snipers) {
+	MainWindow(SniperPortfolio portfolio) {
 		
 		super(APPLICATION_TITLE);
-		
-		this.snipers = snipers;
-		
 		setName(MAIN_WINDOW_NAME);
-		fillContentPane(makeSnipersTable(), makeControls());
+		fillContentPane(makeSnipersTable(portfolio), makeControls());
 		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
 	
+	public void
+	addUserRequestListener(UserRequestListener userRequestListener) {
+	
+		userRequests.addListener(userRequestListener);
+	}
+	
 	private void
 	fillContentPane(JTable snipersTable, JPanel controls){
 	
-		final Container contentPane = getContentPane();
-		
+		final Container contentPane = getContentPane();		
 		contentPane.setLayout(new BorderLayout());
 		contentPane.add(controls, BorderLayout.NORTH);		
 		contentPane.add(new JScrollPane(snipersTable), BorderLayout.CENTER);
 	}
 	
 	private JTable
-	makeSnipersTable(){
+	makeSnipersTable(SniperPortfolio portfolio){
 	
-		final JTable snipersTable = new JTable(snipers);
+		SnipersTableModel model = new SnipersTableModel();
+		portfolio.addPortfolioListener(model);
+		final JTable snipersTable = new JTable(model);
 		snipersTable.setName(SNIPERS_TABLE_NAME);
 		return snipersTable;
 	}
@@ -90,17 +92,5 @@ public class MainWindow extends JFrame {
 		controls.add(joinAuctionButton);
 		
 		return controls;
-	}
-	
-	public void
-	sniperStatusChanged(SniperSnapshot snapshot){
-	
-		snipers.sniperStateChanged(snapshot);
-	}
-
-	public void
-	addUserRequestListener(UserRequestListener userRequestListener) {
-	
-		userRequests.addListener(userRequestListener);
 	}
 }

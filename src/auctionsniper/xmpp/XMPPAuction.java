@@ -21,19 +21,14 @@ public class XMPPAuction implements Auction {
 	private final Chat chat;
 	
 	public
-	XMPPAuction(XMPPConnection connection, String itemId) {
+	XMPPAuction(XMPPConnection connection, String auctionJID) {
 	
-		chat = connection.getChatManager().createChat(
-				auctionId(itemId, connection),
-				new AuctionMessageTranslator(connection.getUser(), auctionEventListeners.announce()));
+		AuctionMessageTranslator translator
+			= new AuctionMessageTranslator(connection.getUser(), auctionEventListeners.announce());
+		
+		chat = connection.getChatManager().createChat(auctionJID, translator);
 	}
 
-	private static String
-	auctionId(String itemId, XMPPConnection connection){
-		
-		return String.format(XMPPAuctionHouse.AUCTION_ID_FORMAT,  itemId, connection.getServiceName());
-	}
-	
 	@Override
 	public void
 	addAuctionEventListener(AuctionEventListener auctionEventListener) {

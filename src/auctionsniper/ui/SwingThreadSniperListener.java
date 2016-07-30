@@ -15,6 +15,7 @@ public class SwingThreadSniperListener implements SniperListener {
 		this.delegate = delegate;
 	}
 	
+	@Override
 	public void
 	sniperStateChanged(final SniperSnapshot snapshot) { 
 	
