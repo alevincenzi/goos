@@ -5,14 +5,17 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import auctionsniper.BidItem;
 import auctionsniper.SniperPortfolio;
 import auctionsniper.UserRequestListener;
 import auctionsniper.ui.SnipersTableModel;
@@ -22,12 +25,13 @@ public class MainWindow extends JFrame {
 		
 	private static final long serialVersionUID = 1L;
 
-	public static final String APPLICATION_TITLE  = "Auction Sniper";
-	public static final String MAIN_WINDOW_NAME   = "Auction Sniper Main";
-	public static final String SNIPER_STATUS_NAME = "sniper status";
-	public static final String SNIPERS_TABLE_NAME = "Snipers Table";
-	public static final String NEW_ITEM_ID_NAME   = "item id";
-	public static final String JOIN_BUTTON_NAME   = "join button";
+	public static final String APPLICATION_TITLE        = "Auction Sniper";
+	public static final String MAIN_WINDOW_NAME         = "Auction Sniper Main";
+	public static final String SNIPER_STATUS_NAME       = "sniper status";
+	public static final String SNIPERS_TABLE_NAME       = "Snipers Table";
+	public static final String NEW_ITEM_ID_NAME         = "item id";
+	public static final String JOIN_BUTTON_NAME         = "join button";
+	public static final String NEW_ITEM_STOP_PRICE_NAME = "stop price";
 	  
 	private final Announcer<UserRequestListener> userRequests
 		= Announcer.to(UserRequestListener.class);
@@ -71,26 +75,60 @@ public class MainWindow extends JFrame {
 	private JPanel
 	makeControls() {
 		
-		final JTextField itemIdField = new JTextField();
-		itemIdField.setColumns(25);
-		itemIdField.setName(NEW_ITEM_ID_NAME);
+		final JTextField itemIdField = itemIdField();
+	    final JFormattedTextField stopPriceField = stopPriceField();
 		
 		JButton joinAuctionButton = new JButton("Join Auction");
 		joinAuctionButton.setName(JOIN_BUTTON_NAME);
 		joinAuctionButton.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void
+			actionPerformed(ActionEvent e) {
 				
-				userRequests.announce().joinAuction(itemIdField.getText());
+				userRequests.announce().joinAuction(
+					new BidItem(itemId(), stopPrice()));
 			}
+		    
+			private String
+			itemId() {
+				
+				return itemIdField.getText();
+		    }
+		    
+			private int
+			stopPrice() { 
+		    
+				return ((Number)stopPriceField.getValue()).intValue(); 
+		    } 
+		        
 		});
 		
 		JPanel controls = new JPanel(new FlowLayout());
 
 		controls.add(itemIdField);
+		controls.add(stopPriceField); 
 		controls.add(joinAuctionButton);
 		
 		return controls;
 	}
+	
+	private JTextField
+	itemIdField() {
+	
+		JTextField itemIdField = new JTextField();
+		itemIdField.setColumns(10);
+		itemIdField.setName(NEW_ITEM_ID_NAME);
+		return itemIdField;
+	}
+
+	private JFormattedTextField
+	stopPriceField() {
+	
+		JFormattedTextField stopPriceField
+			= new JFormattedTextField(NumberFormat.getIntegerInstance());
+		stopPriceField.setColumns(7);
+		stopPriceField.setName(NEW_ITEM_STOP_PRICE_NAME);
+		return stopPriceField;
+	}  
 }

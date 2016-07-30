@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import com.objogate.wl.swing.probe.ValueMatcherProbe;
 
+import auctionsniper.BidItem;
 import auctionsniper.SniperPortfolio;
 import auctionsniper.UserRequestListener;
 import auctionsniper.ui.MainWindow;
@@ -23,17 +24,17 @@ public class MainWindowTest {
 	public void 
 	makesUserRequestWhenJoinButtonClicked() { 
 	
-		final ValueMatcherProbe<String> buttonProbe = 
-	      new ValueMatcherProbe<String>(equalTo("the item id"), "join request");
+		final ValueMatcherProbe<BidItem> itemProbe = 
+	      new ValueMatcherProbe<BidItem>(equalTo(new BidItem("the item id", 789)), "item request");
 		
 	    mainWindow.addUserRequestListener( 
 	    	new UserRequestListener() { 
-	    		public void joinAuction(String itemId) { 
-	    			buttonProbe.setReceivedValue(itemId); 
+	    		public void joinAuction(BidItem item) { 
+	    			itemProbe.setReceivedValue(item); 
 	    		} 
 	        }); 
 	    
-	    driver.startBiddingFor("the item id");
-	    driver.check(buttonProbe); 
+	    driver.startBiddingWithStopPrice("the item id", 789);
+	    driver.check(itemProbe); 
 	}			
 }

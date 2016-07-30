@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import auctionsniper.AuctionSniper;
+import auctionsniper.BidItem;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperState;
 import auctionsniper.ui.Column;
@@ -38,8 +39,11 @@ public class SnipersTableModelTest {
 		= new SnipersTableModel();
 	
 	private final AuctionSniper sniper
-		= new AuctionSniper(ITEM_ID1, null);
+		= new AuctionSniper(new BidItem(ITEM_ID1, 234), null);
 	  
+	private final AuctionSniper sniper2
+		= new AuctionSniper(new BidItem(ITEM_ID2, 345), null);
+	
 	@Before
 	public void
 	attachModelListener() {
@@ -103,8 +107,6 @@ public class SnipersTableModelTest {
 	public void 
 	holdsSnipersInAdditionOrder() {
 	
-		AuctionSniper sniper2 = new AuctionSniper(ITEM_ID2, null);
-		
 	    context.checking(new Expectations() { {
 	      ignoring(listener);
 	    }});

@@ -10,7 +10,7 @@ A small exercise on TDD
 - ~~Single item: Show price details~~
 - ~~Multiple items~~
 - ~~Add items through the user interface~~
-- Stop bidding at the stop price
+- ~~Stop bidding at the stop price~~
 - Translator, invalid message from Auction
 - Translator, incorrect message version
 - Auction, handle XMPPException on send

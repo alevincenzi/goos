@@ -17,18 +17,19 @@ public class ApplicationRunner {
 
 	public void
 	startBiddingIn(final FakeAuctionServer... auctions){
-		
-		startSniper();
-		
-		for (FakeAuctionServer auction : auctions) {
-			
-			driver.startBiddingFor(auction.getItemId());
-			
-			driver.showsSniperStatus(
-				auction.getItemId(), 0, 0, textFor(SniperState.JOINING));
-		}
+
+	    startSniper(); 
+	    for (FakeAuctionServer auction : auctions) {
+	      openBiddingFor(auction, Integer.MAX_VALUE);
+	    }
 	}
-	
+			
+	public void
+	startBiddingWithStopPrice(FakeAuctionServer auction, int stopPrice) {
+	    startSniper();
+	    openBiddingFor(auction, stopPrice);
+	}
+
 	private void
 	startSniper() {
 		
@@ -53,6 +54,21 @@ public class ApplicationRunner {
 		driver.hasTitle(MainWindow.APPLICATION_TITLE);
 		driver.hasColumnTitles();
 	}
+
+	private void
+	openBiddingFor(FakeAuctionServer auction, int stopPrice) {
+	
+		final String itemId = auction.getItemId();
+		driver.startBiddingWithStopPrice(itemId, stopPrice);
+		driver.showsSniperStatus(itemId, 0, 0, textFor(SniperState.JOINING));
+	}
+	  
+	public void
+	stop(){
+	
+		if (driver != null)
+			driver.dispose();
+	}
 	
 	public void
 	hasShownSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
@@ -75,18 +91,16 @@ public class ApplicationRunner {
 			auction.getItemId(), winningBid, winningBid, textFor(SniperState.WINNING));
 	}
 	
+	public void hasShownSniperIsLosing(FakeAuctionServer auction, int lastPrice, int lastBid) {
+	
+		driver.showsSniperStatus(
+			auction.getItemId(), lastPrice, lastBid, textFor(SniperState.LOSING));
+	}
+	  
 	public void
 	hasShownSniperHasWonAuction(FakeAuctionServer auction, int lastPrice) {
 	
 		driver.showsSniperStatus(
 			auction.getItemId(), lastPrice, lastPrice, textFor(SniperState.WON));
-	}
-	
-	
-	public void
-	stop(){
-	
-		if (driver != null)
-			driver.dispose();
 	}
 }
