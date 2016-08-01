@@ -1,4 +1,4 @@
-package unit.auctionsniper;
+package auctionsniper.unit;
 
 import static org.junit.Assert.assertEquals;
 

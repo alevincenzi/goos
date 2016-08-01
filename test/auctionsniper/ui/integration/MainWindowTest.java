@@ -1,4 +1,4 @@
-package integration.auctionsniper.ui;
+package auctionsniper.ui.integration;
 
 import org.junit.Test;
 
@@ -6,11 +6,11 @@ import static org.hamcrest.Matchers.equalTo;
 
 import com.objogate.wl.swing.probe.ValueMatcherProbe;
 
+import auctionsniper.AuctionSniperDriver;
 import auctionsniper.BidItem;
 import auctionsniper.SniperPortfolio;
 import auctionsniper.UserRequestListener;
 import auctionsniper.ui.MainWindow;
-import endtoend.auctionsniper.AuctionSniperDriver;
 
 public class MainWindowTest {
 

@@ -1,4 +1,4 @@
-package unit.auctiosniper.ui;
+package auctionsniper.ui.unit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

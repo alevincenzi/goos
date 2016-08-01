@@ -1,4 +1,4 @@
-package endtoend.auctionsniper;
+package auctionsniper;
 
 
 import static auctionsniper.SniperState.textFor;

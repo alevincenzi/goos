@@ -1,4 +1,4 @@
-package endtoend.auctionsniper;
+package auctionsniper;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;

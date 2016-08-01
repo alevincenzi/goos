@@ -1,4 +1,4 @@
-package unit.auctionsniper;
+package auctionsniper.unit;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;

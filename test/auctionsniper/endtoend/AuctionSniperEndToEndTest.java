@@ -1,7 +1,10 @@
-package endtoend.auctionsniper;
+package auctionsniper.endtoend;
 
 import org.junit.After;
 import org.junit.Test;
+
+import auctionsniper.ApplicationRunner;
+import auctionsniper.FakeAuctionServer;
 
 public class AuctionSniperEndToEndTest {
 
