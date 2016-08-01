@@ -9,9 +9,12 @@ public interface AuctionEventListener extends EventListener {
 		FromOtherBidder
 	};
 	
-	public void auctionClosed();
+	public void
+	auctionClosed();
 
-	public void currentPrice(int price, int increment, PriceSource priceSource);
+	public void
+	currentPrice(int price, int increment, PriceSource priceSource);
 
-	public void auctionFailed();
+	public void
+	auctionFailed();
 }

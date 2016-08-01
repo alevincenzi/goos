@@ -40,6 +40,20 @@ public class XMPPAuction implements Auction {
 		auctionEventListeners.addListener(auctionEventListener);
 	}
 
+	@Override
+	public void
+	bid(int amount) {
+	
+		sendMessage(String.format(BID_COMMAND_FORMAT, amount));
+	}
+
+	@Override
+	public void
+	join() {
+	
+		sendMessage(JOIN_COMMAND_FORMAT);
+	}
+	
 	private AuctionMessageTranslator
 	translatorFor(XMPPConnection connection) {
 	
@@ -62,20 +76,6 @@ public class XMPPAuction implements Auction {
 	    }; 
 	} 
 	  
-	@Override
-	public void
-	bid(int amount) {
-	
-		sendMessage(String.format(BID_COMMAND_FORMAT, amount));
-	}
-
-	@Override
-	public void
-	join() {
-	
-		sendMessage(JOIN_COMMAND_FORMAT);
-	}
-	
 	private void
 	sendMessage(final String message) {
 	

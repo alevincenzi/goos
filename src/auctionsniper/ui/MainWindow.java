@@ -23,7 +23,7 @@ import auctionsniper.util.Announcer;
 
 public class MainWindow extends JFrame {
 		
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6918968768058130976L;
 
 	public static final String APPLICATION_TITLE        = "Auction Sniper";
 	public static final String MAIN_WINDOW_NAME         = "Auction Sniper Main";

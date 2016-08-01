@@ -6,6 +6,7 @@ import auctionsniper.SniperState;
 public enum Column {
 	
 	ITEM_IDENTIFIER("Item") {
+		
 		@Override
 		public Object
 		valueIn(SniperSnapshot snapshot) {
@@ -15,6 +16,7 @@ public enum Column {
 	},
 	
 	LAST_PRICE("Last Price") {
+		
 		@Override
 		public Object
 		valueIn(SniperSnapshot snapshot) {
@@ -24,6 +26,7 @@ public enum Column {
 	},
 	
 	LAST_BID("Last Bid") {
+		
 		@Override
 		public Object
 		valueIn(SniperSnapshot snapshot) {
@@ -33,6 +36,7 @@ public enum Column {
 	},
 	
 	SNIPER_STATE("State") {
+		
 		@Override
 		public Object
 		valueIn(SniperSnapshot snapshot) {
@@ -40,6 +44,8 @@ public enum Column {
 			return SniperState.textFor(snapshot.state);
 		}
 	};
+
+	abstract public Object valueIn(SniperSnapshot snapshot);
 
 	public final String name;
 	
@@ -54,6 +60,4 @@ public enum Column {
 		
 		return values()[offset];
 	}
-	
-	abstract public Object valueIn(SniperSnapshot snapshot);
 }

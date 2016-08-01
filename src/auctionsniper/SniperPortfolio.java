@@ -9,7 +9,8 @@ public class SniperPortfolio implements SniperCollector {
 
 	public interface PortfolioListener extends EventListener {
 	
-		void sniperAdded(AuctionSniper sniper);
+		void
+		sniperAdded(AuctionSniper sniper);
 	}
 	 
 	private final Announcer<PortfolioListener> announcer

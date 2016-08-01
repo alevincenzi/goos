@@ -5,13 +5,15 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class SniperSnapshot {
+
 	public final String      itemId;
 	public final int         lastPrice;
 	public final int         lastBid;
 	public final SniperState state;
 	
 	public
-	SniperSnapshot(String itemId, int lastPrice, int lastBid, SniperState state){
+	SniperSnapshot(
+		String itemId, int lastPrice, int lastBid, SniperState state){
 	
 		this.itemId    = itemId;
 		this.lastPrice = lastPrice;
@@ -40,6 +42,12 @@ public class SniperSnapshot {
 		return ToStringBuilder.reflectionToString(this);
 	}
 	  
+	public static SniperSnapshot
+	joining(String itemId){
+		
+		return new SniperSnapshot(itemId, 0, 0, SniperState.JOINING); 
+	}
+	
 	public SniperSnapshot
 	bidding(int newLastPrice, int newLastBid){
 		
@@ -52,12 +60,6 @@ public class SniperSnapshot {
 		return new SniperSnapshot(itemId, newLastPrice, lastBid, SniperState.WINNING); 
 	}
 	
-	public static SniperSnapshot
-	joining(String itemId){
-		
-		return new SniperSnapshot(itemId, 0, 0, SniperState.JOINING); 
-	}
-	
 	public SniperSnapshot
 	losing(int newLastPrice) {
 		
@@ -65,15 +67,15 @@ public class SniperSnapshot {
 	}
 	
 	public SniperSnapshot
-	failed() {
-	
-		return new SniperSnapshot(itemId, 0, 0, SniperState.FAILED);
-	}
-	  
-	public SniperSnapshot
 	closed(){
 		
 		return new SniperSnapshot(itemId, lastPrice, lastBid, state.whenAuctionClosed()); 
+	}
+
+	public SniperSnapshot
+	failed() {
+	
+		return new SniperSnapshot(itemId, 0, 0, SniperState.FAILED);
 	}
 	
 	public boolean

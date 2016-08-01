@@ -12,9 +12,10 @@ import auctionsniper.util.Defect;
 
 public class SnipersTableModel extends AbstractTableModel implements SniperListener, PortfolioListener {
 	
-	private static final long serialVersionUID = 1L;
-	
-	private ArrayList<SniperSnapshot> snapshots = new ArrayList<SniperSnapshot>();
+	private static final long serialVersionUID = -6692106802697749954L;
+
+	private ArrayList<SniperSnapshot> snapshots
+		= new ArrayList<SniperSnapshot>();
 	
 	@Override
 	public int
@@ -45,7 +46,8 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 	}
 
 	@Override
-	public void sniperAdded(AuctionSniper sniper) {
+	public void
+	sniperAdded(AuctionSniper sniper) {
 
 		addSniperSnapshot(sniper.getSnapshot());	
 		sniper.addSniperListener(new SwingThreadSniperListener(this));

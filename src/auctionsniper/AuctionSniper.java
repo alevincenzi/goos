@@ -4,9 +4,7 @@ import auctionsniper.util.Announcer;
 
 public class AuctionSniper implements AuctionEventListener{
 
-	private final Announcer<SniperListener> listeners
-		= Announcer.to(SniperListener.class);
-	  
+	private final Announcer<SniperListener> listeners = Announcer.to(SniperListener.class);
 	private final Auction auction;
 	private final BidItem item;
 
@@ -49,10 +47,12 @@ public class AuctionSniper implements AuctionEventListener{
 		switch (priceSource) {
 		
 		case FromSniper:
+
 			snapshot = snapshot.winning(price);
 			break;
 		
 		case FromOtherBidder:	
+			
 			int bid = price + increment;
 		     
 			if (item.allowsBid(bid)) {

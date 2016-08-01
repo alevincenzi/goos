@@ -14,8 +14,7 @@ public class Main {
 	private static final int ARG_SNIPER_ID     = 1; 
 	private static final int ARG_SNIPER_PSWD   = 2; 
 	
-	private final SniperPortfolio portfolio
-		= new SniperPortfolio();
+	private final SniperPortfolio portfolio = new SniperPortfolio();
 
 	private MainWindow ui;
 	

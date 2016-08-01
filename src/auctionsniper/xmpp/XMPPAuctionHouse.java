@@ -32,18 +32,14 @@ public class XMPPAuctionHouse implements AuctionHouse {
 	}
 	  
 	@Override
-	public Auction auctionFor(BidItem item) {
+	public Auction
+	auctionFor(BidItem item) {
 
 		return new XMPPAuction(connection, auctionId(item.identifier, connection), failureReporter);
 	}
 
-	private static String
-	auctionId(String itemId, XMPPConnection connection){
-		
-		return String.format(AUCTION_ID_FORMAT,  itemId, connection.getServiceName());
-	}
-	
-	public void disconnect() {
+	public void
+	disconnect() {
 	
 		connection.disconnect();
 	}
@@ -64,7 +60,12 @@ public class XMPPAuctionHouse implements AuctionHouse {
 		}
 	}
 	
-
+	private static String
+	auctionId(String itemId, XMPPConnection connection){
+		
+		return String.format(AUCTION_ID_FORMAT,  itemId, connection.getServiceName());
+	}
+	
 	private Logger
 	makeLogger() throws XMPPAuctionException { 
 	

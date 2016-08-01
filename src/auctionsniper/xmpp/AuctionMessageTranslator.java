@@ -1,6 +1,7 @@
 package auctionsniper.xmpp;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
@@ -44,23 +45,24 @@ public class AuctionMessageTranslator implements MessageListener {
 		String eventType = event.type();
 		
 		if ("CLOSE".equals(eventType)) { 
+			
 			listener.auctionClosed(); 
+		
 		} if ("PRICE".equals(eventType)) { 
+			
 			listener.currentPrice(
-				event.currentPrice(),
-				event.increment(), 
-		        event.isFrom(sniperId)); 
+				event.currentPrice(), event.increment(), event.isFrom(sniperId)); 
 		}
 	} 
 	  
 	private static class AuctionEvent {
 		
-		private final HashMap<String, String> fields = new HashMap<String, String>();
+		private final Map<String, String> fields = new HashMap<String, String>();
 		
 		public String
 		type() throws MissingValueException {
 		
-			return get("Event");
+			return getString("Event");
 		}
 		
 		public int
@@ -84,7 +86,13 @@ public class AuctionMessageTranslator implements MessageListener {
 		}
 		
 		private String
-		get(String fieldName) throws MissingValueException{
+		bidder() throws MissingValueException{
+		
+			return getString("Bidder");
+		}
+		
+		private String
+		getString(String fieldName) throws MissingValueException{
 		
 			final String value = fields.get(fieldName);
 		    if (value == null) {
@@ -96,13 +104,7 @@ public class AuctionMessageTranslator implements MessageListener {
 		private int
 		getInt(String fieldName) throws MissingValueException{
 		
-			return Integer.parseInt(get(fieldName));
-		}
-		
-		private String
-		bidder() throws MissingValueException{
-		
-			return get("Bidder");
+			return Integer.parseInt(getString(fieldName));
 		}
 		
 		private void
