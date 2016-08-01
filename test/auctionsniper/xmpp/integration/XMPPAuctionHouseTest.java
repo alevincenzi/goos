@@ -70,7 +70,7 @@ public class XMPPAuctionHouseTest {
 	    server.hasReceivedJoinRequestFrom(ApplicationRunner.SNIPER_XMPP_ID); 
 	    server.announceClosed(); 
 	    
-	    assertTrue("should have been closed", auctionWasClosed.await(2, SECONDS)); 
+	    assertTrue("should have been closed", auctionWasClosed.await(4, SECONDS)); 
 	 } 
 	  
 	 private AuctionEventListener 

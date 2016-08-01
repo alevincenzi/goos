@@ -25,7 +25,8 @@ public class MainWindowTest {
 	makesUserRequestWhenJoinButtonClicked() { 
 	
 		final ValueMatcherProbe<BidItem> itemProbe = 
-	      new ValueMatcherProbe<BidItem>(equalTo(new BidItem("the item id", 789)), "item request");
+			new ValueMatcherProbe<BidItem>(
+				equalTo(new BidItem("the item id", 789)), "item request");
 		
 	    mainWindow.addUserRequestListener( 
 	    	new UserRequestListener() { 

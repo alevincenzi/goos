@@ -31,7 +31,7 @@ public class AuctionSniperDriver extends JFrameDriver {
 						named(MainWindow.MAIN_WINDOW_NAME),
 						showingOnScreen()),
 				
-				new AWTEventQueueProber(timeoutMilliSeconds, 1000)
+				new AWTEventQueueProber(timeoutMilliSeconds, 100)
 		);
 	}
 

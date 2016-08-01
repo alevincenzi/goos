@@ -53,13 +53,12 @@ public class FakeAuctionServer {
 			});
 	}
 	
-	
 	public void
 	reportPrice(int price, int increment, String bidder) throws XMPPException {
 	
-		currentChat.sendMessage(String.format(XMPPAuction.PRICE_EVENT_FORMAT, price, increment, bidder));
+		currentChat.sendMessage(
+			String.format(XMPPAuction.PRICE_EVENT_FORMAT, price, increment, bidder));
 	}
-	
 	
 	public String
 	getItemId(){
@@ -80,8 +79,7 @@ public class FakeAuctionServer {
 		receivesAMessageMatching(
 			sniperId, equalTo(String.format(XMPPAuction.BID_COMMAND_FORMAT, bid)));
 	}
-		
-		
+			
 	public void
 	receivesAMessageMatching(String sniperId, Matcher<? super String> messageMatcher) throws InterruptedException{
 	
@@ -106,24 +104,24 @@ public class FakeAuctionServer {
 	
 		currentChat.sendMessage(brokenMessage);
 	}
-}
 
-class SingleMessageListener implements MessageListener {
-
-	private final ArrayBlockingQueue<Message> messages =
-			new ArrayBlockingQueue<Message>(1);
+	class SingleMessageListener implements MessageListener {
 	
-	@Override
-	public void
-	processMessage(Chat chat, Message message) {
-	
-		messages.add(message);
-	}
-	
-	public void
-	receivesAMessage(Matcher<? super String> messageMatcher) throws InterruptedException {
-	
-		final Message message = messages.poll(5, TimeUnit.SECONDS);
-		assertThat(message, hasProperty("body", messageMatcher));
+		private final ArrayBlockingQueue<Message> messages =
+				new ArrayBlockingQueue<Message>(1);
+		
+		@Override
+		public void
+		processMessage(Chat chat, Message message) {
+		
+			messages.add(message);
+		}
+		
+		public void
+		receivesAMessage(Matcher<? super String> messageMatcher) throws InterruptedException {
+		
+			final Message message = messages.poll(5, TimeUnit.SECONDS);
+			assertThat(message, hasProperty("body", messageMatcher));
+		}
 	}
 }

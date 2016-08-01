@@ -69,6 +69,19 @@ public class SnipersTableModelTest {
 	
 	@Test
 	public void
+	acceptsNewSniper() {
+	
+		context.checking(new Expectations() {{
+			one(listener).tableChanged(with(anInsertionAtRow(0)));
+	    }});
+
+	    model.sniperAdded(sniper);
+	    
+	    assertRowMatchesSnapshot(0, SniperSnapshot.joining(ITEM_ID1));
+	}
+	  
+	@Test
+	public void
 	setsSniperValuesInColumns() {
 		
 		SniperSnapshot bidding = sniper.getSnapshot().bidding(555, 666);
@@ -118,6 +131,26 @@ public class SnipersTableModelTest {
 	    assertEquals(ITEM_ID2, cellValue(1, Column.ITEM_IDENTIFIER));
 	}
 	
+	@Test
+	public void 
+	updatesCorrectRowForSniper() {
+	    
+	    context.checking(new Expectations() { {
+	      
+	    	allowing(listener).tableChanged(with(anyInsertionEvent()));
+
+	    	one(listener).tableChanged(with(aChangeInRow(1)));
+	    }});
+	    
+	    model.sniperAdded(sniper);
+	    model.sniperAdded(sniper2);
+
+	    SniperSnapshot winning1 = sniper2.getSnapshot().winning(123);
+	    model.sniperStateChanged(winning1);
+	    
+	    assertRowMatchesSnapshot(1, winning1);
+	}
+	  
 	@Test(expected=Defect.class)
 	public void
 	throwsDefectIfNoExistingSniperForAnUpdate() {
@@ -137,6 +170,7 @@ public class SnipersTableModelTest {
 	
 	private Object
 	cellValue(int rowIndex, Column column) {
+
 		return model.getValueAt(rowIndex, column.ordinal());
 	}
 	

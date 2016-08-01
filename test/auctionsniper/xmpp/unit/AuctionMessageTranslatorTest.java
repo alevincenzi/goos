@@ -88,14 +88,12 @@ public class AuctionMessageTranslatorTest {
 	 public void 
 	 notifiesAuctionFailedWhenEventTypeMissing() { 
 	 
-		 context.checking(new Expectations() {{
-			 exactly(1).of(listener).auctionFailed();
-		 }});
-
-		Message message = new Message();
-		message.setBody(String.format(XMPPAuction.MISSING_EVENT_FORMAT, 234, 5, ApplicationRunner.SNIPER_ID));
+		 String badMessage =
+			String.format(XMPPAuction.MISSING_EVENT_FORMAT, 234, 5, ApplicationRunner.SNIPER_ID);
 		 
-		translator.processMessage(UNUSED_CHAT, message); 
+		 expectFailureWithMessage(badMessage);
+
+		 translator.processMessage(UNUSED_CHAT, message(badMessage)); 
 	 }
 	 
 	 private Message
@@ -113,7 +111,9 @@ public class AuctionMessageTranslatorTest {
 		
 			oneOf(listener).auctionFailed(); 
 		    oneOf(failureReporter).cannotTranslateMessage(
-		    		with(ApplicationRunner.SNIPER_ID), with(badMessage), with(any(Exception.class))); 
+		    		with(ApplicationRunner.SNIPER_ID),
+		    		with(badMessage),
+		    		with(any(Exception.class))); 
 		}}); 
 	} 
 }
