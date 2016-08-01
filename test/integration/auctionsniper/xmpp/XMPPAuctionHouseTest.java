@@ -84,6 +84,8 @@ public class XMPPAuctionHouseTest {
 			 } 
 			 public void currentPrice(int price, int increment, PriceSource priceSource) {
 	    	 }
+			 public void auctionFailed() {
+			 }
 		 }; 
 	 }
 }
